@@ -3,13 +3,13 @@ main:
   #- title: "Quick-Start Guide"
    # url: https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/
   - title: "machine learning"
-    description: "machine learning projects, code"
+    description: "machine learning projects & code"
   - title: "data visualization"
     description: "exploratory data analysis, a.k.a. eye candy"
   - title: "python"
-    description: "tips, tricks, how-to"
+    description: "tips, tricks & how-to"
   - title: "reading"
-    description: "papers and other online reading"
+    description: "papers & other online reading"
   
   # - title: "About"
   #   url: https://mmistakes.github.io/minimal-mistakes/about/
