@@ -108,7 +108,7 @@ analytics:
 author:
   name             : "Kristine Kunapuli"
   avatar           : "assets/images/profilePic.jpg" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "data enthusiast"
+  bio              : "sharing explorations in machine learning, data visualization, and python"
   location         : "Texas"
   email            :
   links:
@@ -201,7 +201,7 @@ sass:
 
 # Outputting
 permalink: /:categories/:title/
-paginate: 5 # amount of posts to show
+paginate: 0 # amount of posts to show
 paginate_path: /page:num/
 timezone: # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
