@@ -23,8 +23,8 @@ description              : "sharing explorations in machine learning, data visua
 url                      : "https://kkunapuli.github.io" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : "kkunapuli/kkunapuli.github.io" # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
-teaser                   : "images/ffts.jpg" # path of fallback teaser image, e.g. "/assets/images/500x300.png"
-logo                     : "images/ffts.jpg"# path of logo image to display in the masthead, e.g. "/assets/images/88x88.png"
+teaser                   : "assets/images/ffts.jpg" # path of fallback teaser image, e.g. "/assets/images/500x300.png"
+logo                     : "assets/images/ffts.jpg"# path of logo image to display in the masthead, e.g. "/assets/images/88x88.png"
 masthead_title           : "let's learn" # overrides the website title displayed in the masthead, use " " for no title
 # breadcrumbs            : false # true, false (default)
 words_per_minute         : 200
@@ -107,7 +107,7 @@ analytics:
 # Site Author
 author:
   name             : "Kristine Kunapuli"
-  avatar           : "images/IMG_20190417_203110.jpg" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
+  avatar           : "assets/images/profile_pic.jpg" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
   bio              : "working on it"
   location         : "Texas"
   email            :
