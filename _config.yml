@@ -107,7 +107,7 @@ analytics:
 # Site Author
 author:
   name             : "Kristine Kunapuli"
-  avatar           : "assets/images/profile_pic.jpg" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
+  avatar           : "assets/images/profilePic.jpg" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
   bio              : "working on it"
   location         : "Texas"
   email            :
