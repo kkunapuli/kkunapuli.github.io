@@ -7,4 +7,4 @@ header:
    image: /assets/images/primes.jpg
 ---
 
-This is the page with reading
+This is the page with all the machine learning fun
