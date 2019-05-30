@@ -1,6 +1,6 @@
 ---
 title:  "reading"
-layout: archive
+layout: single
 permalink: /reading/
 author_profile: true
 header:
