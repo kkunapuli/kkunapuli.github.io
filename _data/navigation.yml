@@ -4,8 +4,8 @@ main:
    # url: https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/
   - title: "machine learning"
     description: "machine learning projects & code"
-  - title: "data visualization"
-    description: "exploratory data analysis, a.k.a. eye candy"
+  #- title: "data visualization"
+   # description: "exploratory data analysis, a.k.a. eye candy"
   - title: "python"
     description: "tips, tricks & how-to"
   - title: "reading"
