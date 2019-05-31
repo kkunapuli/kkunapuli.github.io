@@ -18,12 +18,10 @@ Some useful pythonic idioms I've learned along with simply useful code snippets.
 Reverse a list
 : Get a new copy of a list reversed with slicing:
 ```python
-{
-my_list = range(5)
+my_list = [0, 1, 2, 3, 4]
 reverse_list = my_list[::-1]
 print(my_list)
 print(reverse_list)
-}
 ```
 
 List comprehension
