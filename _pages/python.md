@@ -31,6 +31,7 @@ List comprehension
 ```python
 {
 odd_list = [i for i in my_list if i%2 == 1]
+print(odd_list)
 }
 ```
 
