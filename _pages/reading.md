@@ -17,8 +17,21 @@ Here's a collection of research papers or other articles I found particularly in
 ## Large Scale Computing
 
 * morning paper: [The Tail at Scale](https://blog.acolyer.org/2015/01/15/the-tail-at-scale/)
-
 * morning paper: [Gray failure](https://blog.acolyer.org/2017/06/15/gray-failure-the-achilles-heel-of-cloud-scale-systems/)
+
+## Deep Learning & Optimization
+
+* [One Model to Learn Them All](https://arxiv.org/abs/1706.05137)
+* [Adam: A Method for Stochastic Optimization](https://arxiv.org/abs/1412.6980v8)
+
+## Clustering
+
+* [Improving Similarity Search with High-dimensional Locality-sensitive Hashing](https://arxiv.org/abs/1812.01844)
+
+## Inspiration
+
+* [The Amazing Psychology of Japanese Train Stations](https://www.citylab.com/transportation/2018/05/the-amazing-psychology-of-japanese-train-stations/560822/)
+this is more text; how will it go?!?!
 
 
 
