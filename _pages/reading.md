@@ -9,11 +9,12 @@ header:
 
 This is a collection of research papers or other articles I found particularly interesting. They come from all over: shares from a friend, my Google feed, or the paper citation equivalent of a [Wiki rabbit hole](https://en.wikipedia.org/wiki/Wiki_rabbit_hole). More recently, I've been enjoying [the morning paper](https://blog.acolyer.org/).
 
-> ###Title Art
+> ### Title Art
+>
 > Primorial Soup from Patterns of the Universe (Bellos and Harriss). The squiggly design was created by assigning a random value to each pixel then repeatedly blurring and sharpening the image until a pattern emerges. **Colors by me**.
 
 
-##Large Scale Computing
+## Large Scale Computing
 
 * morning paper: [The Tail at Scale](https://blog.acolyer.org/2015/01/15/the-tail-at-scale/)
 
