@@ -110,7 +110,7 @@ author:
   avatar           : "assets/images/profilePic.jpg" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
   bio              : "sharing explorations in machine learning, data visualization, and python"
   location         : "Texas"
-  email            : "kgarot-at-gmail-dot-com"
+  email            : "kgarot@gmail.com"
   links:
     - label: "LinkedIn"
       icon: "fab fa-linkedin"
