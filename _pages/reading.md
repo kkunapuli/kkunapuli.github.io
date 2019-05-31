@@ -11,7 +11,7 @@ Here's a collection of research papers or other articles I found particularly in
 
 > ### Title Art
 >
-> Primorial Soup from [Patterns of the Universe](https://www.amazon.com/Patterns-Universe-Coloring-Adventure-Beauty/dp/1615193235). The squiggly design was created by assigning a random value to each pixel then repeatedly blurring and sharpening the image until a pattern emerges. **Colors by me**.
+> Primordial Soup from [Patterns of the Universe](https://www.amazon.com/Patterns-Universe-Coloring-Adventure-Beauty/dp/1615193235). The squiggly design was created by assigning a random value to each pixel then repeatedly blurring and sharpening the image until a pattern emerges. **Colors by me**.
 
 
 ## Large Scale Computing
