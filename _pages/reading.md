@@ -7,7 +7,7 @@ header:
    image: /assets/images/pixels.jpg
 ---
 
-Here's a collection of research papers or other articles I found particularly interesting. They come from all over: shares from a friend, my Google feed, or the paper citation equivalent of a [Wiki rabbit hole](https://en.wikipedia.org/wiki/Wiki_rabbit_hole). More recently, I've been enjoying [the morning paper](https://blog.acolyer.org/).
+Here's a collection of research papers or other articles I found particularly interesting. They come from all over: shares from friends, my Google feed, or the paper citation equivalent of a [Wiki rabbit hole](https://en.wikipedia.org/wiki/Wiki_rabbit_hole). More recently, I've been enjoying [the morning paper](https://blog.acolyer.org/).
 
 > ### Title Art
 >
