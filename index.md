@@ -7,13 +7,9 @@ header:
   image_description: "FFTs. Color by me; design by 'Patterns of the Universe' (Bellos & Harriss)"
 ---
 
-markdown test
+I like to read, code, & try new things; this is my space to share it all.
 
-## title?
-
-more text!!!
-
-### another title?
-
-even more text!!!
+> ### Title Art
+>
+> Petit Fourier from [Patterns of the Universe](https://www.amazon.com/Patterns-Universe-Coloring-Adventure-Beauty/dp/1615193235). An intricate pattern created by applying a fourier transform to a ring of circles; the masterhead logo is an uncropped version of the same picture. Creating with color and pattern is one way I like to relax. All title art on this site was done by me using colored pencils. **Colors by me**.
 
