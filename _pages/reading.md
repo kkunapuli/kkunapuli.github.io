@@ -24,14 +24,9 @@ Here's a collection of research papers or other articles I found particularly in
 * [One Model to Learn Them All](https://arxiv.org/abs/1706.05137)
 * [Adam: A Method for Stochastic Optimization](https://arxiv.org/abs/1412.6980v8)
 
-## Clustering
+## Data Mining
 
 * [Improving Similarity Search with High-dimensional Locality-sensitive Hashing](https://arxiv.org/abs/1812.01844)
-
-## Inspiration
-
-* [The Amazing Psychology of Japanese Train Stations](https://www.citylab.com/transportation/2018/05/the-amazing-psychology-of-japanese-train-stations/560822/)
-this is more text; how will it go?!?!
 
 
 
