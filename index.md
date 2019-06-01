@@ -7,7 +7,7 @@ header:
   image_description: "FFTs. Color by me; design by 'Patterns of the Universe' (Bellos & Harriss)"
 ---
 
-I like to read, code, & try new things; this is my space to share it all.
+I like to read, create, & try new things; this is my space to share it all.
 
 > ### Title Art
 >
