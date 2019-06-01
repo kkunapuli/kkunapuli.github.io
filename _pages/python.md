@@ -50,7 +50,7 @@ List comprehension
 The general format is  `[expression for item in list if condition]`
 
 Iterate list with a value and index
-: Python makes it really easy to iterate through a list, but sometimes I *still* need an index. Luckily `enumerate()` return both index and value.
+: Python makes it really easy to iterate through a list, but sometimes I *still* need an index. Luckily `enumerate()` returns both index and value.
 ```python
 >>> # create a list of strings
 ... fruits = ['apple', 'orange', 'banana', 'mango']
