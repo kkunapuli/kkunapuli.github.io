@@ -17,7 +17,7 @@ Some useful pythonic idioms I've learned along with simply useful code snippets.
 
 Reverse a list
 : Get a new copy of a list reversed with slicing:
-```python3
+```python
 >>> # create a simple test list
 ... my_list = [0, 1, 2, 3 , 4, 5]
 >>> 
