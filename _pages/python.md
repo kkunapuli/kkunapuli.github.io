@@ -47,7 +47,7 @@ List comprehension
 >>> square_list
 [1, 9, 25, 49, 81]
 ```
-The general format is  `[expression for item in list if condition]`
+The general format is  `[`EXPERSSION `for` ITEM `in` LIST `if` CONDITION`]`
 
 Iterate list with a value and index
 : Python makes it really easy to iterate through a list, but sometimes I *still* need an index. Luckily `enumerate()` returns both index and value.
