@@ -21,8 +21,17 @@ Here's a collection of research papers or other articles I found particularly in
 
 ## Deep Learning & Optimization
 
+* [Matching Networks for One Shot Learning](https://arxiv.org/abs/1606.04080)
 * [One Model to Learn Them All](https://arxiv.org/abs/1706.05137)
 * [Adam: A Method for Stochastic Optimization](https://arxiv.org/abs/1412.6980v8)
+
+## Computer Vision
+
+* [YOLO9000: Better, Faster, Stronger](https://arxiv.org/abs/1612.08242)
+
+## Machine Learning at Scale
+
+* morning paper: [Machine Learning: The High-Interest Credit Card of Technical Debt](https://blog.acolyer.org/2016/02/29/machine-learning-the-high-interest-credit-card-of-technical-debt/)
 
 ## Data Mining
 
