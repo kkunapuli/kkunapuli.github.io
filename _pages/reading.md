@@ -19,6 +19,10 @@ Here's a collection of research papers or other articles I found particularly in
 * morning paper: [The Tail at Scale](https://blog.acolyer.org/2015/01/15/the-tail-at-scale/)
 * morning paper: [Gray failure](https://blog.acolyer.org/2017/06/15/gray-failure-the-achilles-heel-of-cloud-scale-systems/)
 
+## Machine Learning at Scale
+
+* morning paper: [Machine Learning: The High-Interest Credit Card of Technical Debt](https://blog.acolyer.org/2016/02/29/machine-learning-the-high-interest-credit-card-of-technical-debt/)
+
 ## Deep Learning & Optimization
 
 * [Matching Networks for One Shot Learning](https://arxiv.org/abs/1606.04080)
@@ -28,10 +32,6 @@ Here's a collection of research papers or other articles I found particularly in
 ## Computer Vision
 
 * [YOLO9000: Better, Faster, Stronger](https://arxiv.org/abs/1612.08242)
-
-## Machine Learning at Scale
-
-* morning paper: [Machine Learning: The High-Interest Credit Card of Technical Debt](https://blog.acolyer.org/2016/02/29/machine-learning-the-high-interest-credit-card-of-technical-debt/)
 
 ## Data Mining
 
