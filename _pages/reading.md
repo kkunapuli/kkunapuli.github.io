@@ -33,7 +33,7 @@ Here's a collection of research papers or other articles I found particularly in
 
 * [YOLO9000: Better, Faster, Stronger](https://arxiv.org/abs/1612.08242)
 
-## Clustering & Data Mining
+## Data Mining
 
 * [Improving Similarity Search with High-dimensional Locality-sensitive Hashing](https://arxiv.org/abs/1812.01844)
 * [Survey of Clustering Data Mining Techniques](https://www.cc.gatech.edu/~isbell/reading/papers/berkhin02survey.pdf)
