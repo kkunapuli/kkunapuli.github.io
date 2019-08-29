@@ -2,9 +2,9 @@
 main:
   #- title: "Quick-Start Guide"
    # url: https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/
-  - title: "machine learning"
+  - title: "playground"
     url: /machineLearning/
-    description: "machine learning projects & code"
+    description: "data & machine learning projects"
   #- title: "data visualization"
    # description: "exploratory data analysis, a.k.a. eye candy"
   - title: "python"
