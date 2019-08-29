@@ -116,3 +116,4 @@ Modify a character in a string
 >>> str = "".join(str_list) # convert list back into a string
 >>> str
 'coal'
+```
