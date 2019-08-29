@@ -83,20 +83,11 @@ Swap items in a single line
 >>>
 >>> # extends to N items and can be used with other objects like lists
 >>> a, b, c = [0, 1, 2], [3, 4, 5], [6, 7, 8]
->>> a
-[0, 1, 2]
->>> b
-[3, 4, 5]
->>> c
-[6, 7, 8]
+>>> print('a={}, b={}, c={}'.format(a, b, c))
+a=[0, 1, 2], b=[3, 4, 5], c=[6, 7, 8]
 >>> # rotate a, b, c lists (a=b, b=c, c=a)
->>> a, b, c = b, c, a
->>> a
-[3, 4, 5]
->>> b
-[6, 7, 8]
->>> c
-[0, 1, 2]
+>>> print('a={}, b={}, c={}'.format(a, b, c))
+a=[3, 4, 5], b=[6, 7, 8], c=[0, 1, 2]
 ```
 
 Modify a character in a string
