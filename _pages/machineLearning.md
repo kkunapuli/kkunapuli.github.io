@@ -1,5 +1,5 @@
 ---
-title:  "machine learning"
+title:  "data & machine learning related experiments"
 layout: single
 permalink: /machineLearning/
 author_profile: true
