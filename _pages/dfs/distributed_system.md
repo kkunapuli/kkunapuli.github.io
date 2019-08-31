@@ -1,5 +1,5 @@
 ---
-title:  "distributed file system"
+title:  "Store ALL the Data"
 layout: single
 author_profile: true
 header:
@@ -11,7 +11,7 @@ June, 2019
 
 Distributed File Systems (DFS) allow us to store and access huge amounts of data as if it was available locally. Sometimes a server runs out of space or it's simply not feasible to expect that all relevant data be stored on a single machine. With a distributed file system, we can easily add more space (and compute capacity) without impacting clients. Sounds simple enough but if we're going to successfully handle multiple requests from multiple clients, we need to have **conncurrency** and **synchronization** mechanisms in place. 
 
-**My core contribution to the project was the Data Node**; it will be the focus of this discussion. [code on GitHub]({% https://github.com/kkunapuli/DistributedFileSystem %})
+**My core contribution to the project was the Data Node**; it will be the focus of this discussion. [code on GitHub](https://github.com/kkunapuli/DistributedFileSystem)
 
 ## Basic Architecture
 For this project we have one Name Node that communicates with multiple Data Nodes and Clients. 
