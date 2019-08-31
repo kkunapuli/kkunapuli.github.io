@@ -16,4 +16,4 @@ I like to read, create, & learn new things; this is my space to share it all.
 ## A Little More About Me
 As a signal processing engineer at a small company, I spend a lot of time working with data and transforming it into something useful. With a team, I build systems to collect, process, and analyze data. I've had the privilege of working the entire algorithm development cycle including prototyping, production code, defining metrics and sharing results. Simply put, I'm a problem solver.
 
-I also like baking (my specialty is banana bread), playing board games (Scrabble & Carcassonne are favorites), and playing sports or going for a run. 
+I also like baking (my specialty is banana bread), playing board games (Scrabble & Carcassonne are favorites), and watching sports or going for a run. 
