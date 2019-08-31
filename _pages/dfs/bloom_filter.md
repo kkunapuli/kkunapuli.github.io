@@ -1,5 +1,5 @@
 ---
-title:  "bloom filter; count selected words"
+title:  "Count Selected Words using Bloom Filter"
 layout: single
 author_profile: true
 header:
@@ -7,7 +7,4 @@ header:
    caption: "Photo by Jon Tyson on Unsplash"
 ---
 
-we like hashing
-
-### why hashing?
-more text; description ... gotta remember all that markdown...
+coming soon...
