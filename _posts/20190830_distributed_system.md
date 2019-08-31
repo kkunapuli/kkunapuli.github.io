@@ -1,12 +1,12 @@
 ---
-title: "Distributed System"
-date: 2019-08-30
-tags: [alpha, beta, gamma]
-header:
-  image: "/images/pranav-kumar-jain-PR_0IPlMXgk-unsplash_opt_crop.jpg"
+title:  "distributed file system"
+layout: category
+author_profile: true
 excerpt: "??? what - DFs?!"
 categories:
-  - sandbox
- ---
+  - machineLearning
+header:
+   image: /assets/images/pranav-kumar-jain-PR_0IPlMXgk-unsplash_opt_crop.jpg
+---
  
  content here???
