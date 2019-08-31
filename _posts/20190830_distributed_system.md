@@ -1,3 +1,4 @@
+---
 title: "Distributed System"
 date: 2019-08-30
 tags: [alpha, beta, gamma]
@@ -6,3 +7,6 @@ header:
 excerpt: "??? what - DFs?!"
 categories:
   - sandbox
+ ---
+ 
+ content here???
