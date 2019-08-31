@@ -15,10 +15,11 @@ Things I've had fun learning and exploring.
 
 ## Big Data
 
-* [Distributed File System]({% link _pages/dfs/distributed_system.md %})
+[Distributed File System]({% link _pages/dfs/distributed_system.md %})
+: can I put a description here?
 
-can I put a description here?
+[MapReduce: word counter]({% link _pages/dfs/map_reduce.md %})
+: and here?
 
-* [MapReduce: word counter]({% link _pages/dfs/map_reduce.md %})
-
-and here?
+[MapReduce: bloom filter]({% link _pages/dfs/bloom_filter.md %})
+: we like to describe links
