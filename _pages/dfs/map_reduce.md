@@ -1,5 +1,5 @@
 ---
-title:  "map reduce word counter"
+title:  "Count Words Fast with MapReduce"
 layout: single
 author_profile: true
 header:
@@ -7,7 +7,4 @@ header:
    caption: "Photo by Marília Castelli on Unsplash"
 ---
 
-set up the project
-
-### sub-section
-more text; description ... gotta remember all that markdown...
+coming soon...
