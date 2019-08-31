@@ -14,6 +14,6 @@ I like to read, create, & learn new things; this is my space to share it all.
 > Petit Fourier from [Patterns of the Universe](https://www.amazon.com/Patterns-Universe-Coloring-Adventure-Beauty/dp/1615193235). Petite Fourier is an intricate pattern created by applying a fourier transform to a ring of circles; the masterhead logo is an uncropped version of the same picture. Creating with color and pattern is one way I like to relax. All title art on this site is a result of many hours spent with my colored pencils and an inspiring design. **Colors by me**.
 
 ## A Little More About Me
-As a signal processing engineer at a small company, I spend a lot of time working with data and transforming it into something useful. With a team, I build sysetems to collect, process, and analyze data. I've had the privilege of working the entire algorithm development cycle including prototyping, production code, defining metrics and sharing results. Simply put, I'm a problem solver.
+As a signal processing engineer at a small company, I spend a lot of time working with data and transforming it into something useful. With a team, I build systems to collect, process, and analyze data. I've had the privilege of working the entire algorithm development cycle including prototyping, production code, defining metrics and sharing results. Simply put, I'm a problem solver.
 
 I also like baking (my specialty is banana bread), playing board games (Scrabble & Carcassonne are favorites), and going for a run. 
