@@ -1,7 +1,8 @@
 ---
 title:  "data & machine learning"
-layout: single
+layout: category
 permalink: /machineLearning/
+taxonomy: machineLearning
 author_profile: true
 header:
    image: /assets/images/primes.jpg
