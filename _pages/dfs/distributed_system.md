@@ -46,14 +46,14 @@ When receiving an APPEND request, Name Node first splits the data into 4 MB bloc
 Data Node serves as the storeroom of the DFS. It has two primary data structures: a queue of available blocks and a hashmap of used blocks. The queue and hashmap have their own individual locks (qLock for queue and uLock for hashmap); whenever a data structure is modified, Data Node first obtains the relevant lock, modifies the data structure and then releases the lock.
 
 All locks have a minimal scope in order to prevent deadlock or excessive blocking.
-{: .notice--primary}
+{: .notice--warning}
 
 Because we are simulating a DFS on a single computer, Data Node saves a block of data in its own directory: data_<port>. Each allocated block of data is represented by a file: blk_<num>.bin; Data Node does not put a limit on block filesize (Name Node handles 4MB limit).
 
 Data Node accepts a port number as a command line argument and starts a ServerSocket on the specified port. It then listens continuously on its port and accepts a client connection from Name Node when a new message comes in. Each new message is handled in a new thread: Data Node Handler. 
 
 It is important to immediately start a new thread when a message comes in so that subsequent incoming messages are not blocked.
-{: .notice--primary}
+{: .notice--warning}
 
 Data Node Handler extends Java’s Thread class and its constructor takes two arguments: the message as a String, and a DataNode object. The reference to Data Node is given as an argument to its thread so that Data Node Handler can perform alloc(), read(), and write() requests on Data Node. With using locks, a data node has to manage its own resources; thus a handler has access to a single instance of a data node (representing a unique host). If data can be modified in one place it is simpler to ensure its safety.
 
@@ -62,7 +62,7 @@ The Communication process between NameNode and one DataNode is shown in “DataN
 
 Concurrency is a huge conern for Data Nodes. We can ensure that data is kept safe by performing all actions sequentially, but then requests would take much longer than if processed in parallel. See [reader writer problem](https://en.wikipedia.org/wiki/Readers%E2%80%93writers_problem) for more information. Each allocated block has a file name, read lock, and write lock (using [Java's ReadWriteLock class](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/ReentrantReadWriteLock.html)).  In order to allow a read on block x1 while writing to block x2 of the same DataNode, each block has its own instance of ReentrantReadWriteLock. For simplicity, a Block object has a read lock (rLock) and a write lock (wLock). 
 
-Both locks are declared as final so that they cannot be modified. To emphasize this point, they were not given ‘setter’ methods in the Block class. {:. notice--primary}
+Both locks are declared as final so that they cannot be modified. To emphasize this point, they were not given ‘setter’ methods in the Block class. {:. notice--warning}
 
 We get writer preference for free with Java’s ReadWriteLock, i.e. if a DataNodeHandler is writing to block x1 or requests write access to x1, no readers will be given access to x1. Readers may be given access to any Block other than x1 since Blocks have independent ReadWriteLocks. We also get the ability to allow multiple readers on the same block at the same time from ReadWriteLock.
 
