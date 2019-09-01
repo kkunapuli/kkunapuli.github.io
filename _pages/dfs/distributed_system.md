@@ -15,7 +15,7 @@ Distributed File Systems (DFS) allow us to store and access huge amounts of data
 
 ## Basic Architecture
 For this project we have one Name Node that communicates with multiple Data Nodes and Clients. 
-<img src="/images/dfs/dfg_main_opt.png">
+<img src="/assets/images/dfs/dfg_main_opt.png">
 <figcaption>General Distributed File System with N Data Nodes<figcaption>
 
 ## Communication Design
