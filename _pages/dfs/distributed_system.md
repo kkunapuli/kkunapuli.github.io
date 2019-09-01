@@ -14,16 +14,19 @@ Distributed File Systems (DFS) allow us to store and access huge amounts of data
 **My core contribution to the project was the Data Node**; it will be the focus of this discussion. [GitHub project](https://github.com/kkunapuli/DistributedFileSystem)
 
 ## Basic Architecture
-For this project we have one Name Node that communicates with multiple Data Nodes and Clients. 
+There are three types of actors: Client, Name Node, and Data Node. For this project we have one Name Node that communicates with multiple Data Nodes and Clients. Data Nodes store information or "data" in fixed blocks of size 4 MB. 
 
 <img src="/assets/images/dfs/dfg_main_opt.png">
-<figcaption>General Distributed File System with N Data Nodes</figcaption>
-   
+<figcaption>General Distributed File System with N Data Nodes. While only one client is shown, multiple clients can access the system at a time.</figcaption>
+
+Clients send requests to Name Node; they can either APPEND data to a file or READ from a file. For APPEND commands, Name Node finds free blocks on one or more Data Nodes for storage. With READ commands, Name collects applicable blocks from Data Nodes and assembles them in order to return to the Client.
+
+It's important to utilize threads to ensure that Name Node and Data Nodes can handle multiple requests. Each incoming request is processed as a new thread. Data Nodes have additional data protection mechanisms in place that parallel access without issue.
 
 ## Communication Design
 Name Node needs to be able to communicate with both clients and data nodes seamlessly. 
 
-### Relevant Files:
+### Relevant Files
 - Client.java
 - NameNode.java
 
