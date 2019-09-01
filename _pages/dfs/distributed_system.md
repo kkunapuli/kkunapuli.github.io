@@ -60,8 +60,8 @@ It is important to immediately start a new thread when a message comes in so tha
 
 Data Node Handler extends Java’s Thread class and its constructor takes two arguments: the message as a String, and a DataNode object. The reference to Data Node is given as an argument to its thread so that Data Node Handler can perform alloc(), read(), and write() requests on Data Node. With using locks, a data node has to manage its own resources; thus a handler has access to a single instance of a data node (representing a unique host). If data can be modified in one place it is simpler to ensure its safety.
 
-**insert new figure here**
-The Communication process between Name Node and one DataNode is shown in “Data Node Message Handling” figure. Although only one Data Node is shown, in reality the Name Node connects to and communicates with all DataNodes.
+<img src="/assets/images/dfs/data_comm_opt.png">
+<figcaption>The Communication process between Name Node and one DataNode is shown in “Data Node Message Handling” figure. Although only one Data Node is shown, in reality the Name Node connects to and communicates with all DataNodes.</figcaption>
 
 **Concurrency is a huge concern for Data Nodes.** We can ensure that data is kept safe by performing all actions sequentially, but then requests would take much longer than if processed in parallel. See [reader writer problem](https://en.wikipedia.org/wiki/Readers%E2%80%93writers_problem) for more information. Each allocated block has a file name, read lock, and write lock (using [Java's ReadWriteLock class](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/ReentrantReadWriteLock.html)).  In order to allow a read on block x1 while writing to block x2 of the same Data Node, each block has its own instance of ReentrantReadWriteLock. For simplicity, a Block object has a read lock (rLock) and a write lock (wLock). 
 
