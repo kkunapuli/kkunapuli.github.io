@@ -16,7 +16,7 @@ Distributed File Systems (DFS) allow us to store and access huge amounts of data
 ## Basic Architecture
 There are three types of actors: Client, Name Node, and Data Node. For this project we have one Name Node that communicates with multiple Data Nodes and Clients. Data Nodes store information or "data" in fixed blocks of size 4 MB. 
 
-<img src="/assets/images/dfs/dfg_main_opt.png">
+<img src="/assets/images/dfs/dfs_main_opt.png">
 <figcaption>General Distributed File System with N Data Nodes. While only one client is shown, multiple clients can access the system at a time.</figcaption>
 
 
