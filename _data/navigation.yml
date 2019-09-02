@@ -5,9 +5,6 @@ main:
   - title: "sandbox"
     url: /sandbox/
     description: "data & machine learning projects"
-    subfolderitems:
-      - page: distributed_system
-        url: /dfs/distributed_system
   #- title: "data visualization"
    # description: "exploratory data analysis, a.k.a. eye candy"
   - title: "python"
