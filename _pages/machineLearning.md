@@ -1,7 +1,7 @@
 ---
 title:  "data & machine learning"
 layout: single
-permalink: /machineLearning/
+permalink: /sandbox/
 author_profile: true
 header:
    image: /assets/images/primes.jpg
