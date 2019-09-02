@@ -2,7 +2,6 @@
 title:  "Store ALL the Data"
 layout: single
 author_profile: true
-permalink: /sandbox/dfs/distributed_system/
 header:
    image: /assets/images/pranav-kumar-jain-PR_0IPlMXgk-unsplash_opt_crop.jpg
    caption: "Photo by Pranav Kumar Jain on Unsplash"
