@@ -3,7 +3,7 @@ main:
   #- title: "Quick-Start Guide"
    # url: https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/
   - title: "sandbox"
-    url: /machineLearning/
+    url: /sandbox/
     description: "data & machine learning projects"
   #- title: "data visualization"
    # description: "exploratory data analysis, a.k.a. eye candy"
