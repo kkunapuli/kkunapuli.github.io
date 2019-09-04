@@ -96,16 +96,16 @@ We use StartDataNodes.java and [Process Builder](https://docs.oracle.com/javase/
    {: .notice--warning}
 
 2. Start Name Node on the command line:
-```sh 
-$ startNN="java -classpath bin/ NameNode"
-$ $startNN&
-$ lsof -i -n -P | grep TCP | grep java
-java      17426 kristinekunapuli    6u  IPv6 0xdd20bf3903ab9c7b      0t0  TCP *:65530 (LISTEN)
-java      17427 kristinekunapuli    6u  IPv6 0xdd20bf3903ab7fbb      0t0  TCP *:65531 (LISTEN)
-java      17428 kristinekunapuli    6u  IPv6 0xdd20bf3903ab62fb      0t0  TCP *:65532 (LISTEN)
-java      17431 kristinekunapuli    6u  IPv6 0xdd20bf3903ab743b      0t0  TCP *:5558 (LISTEN)
-```
+      ```sh 
+      $ startNN="java -classpath bin/ NameNode"
+      $ $startNN&
+      $ lsof -i -n -P | grep TCP | grep java
+      java      17426 kristinekunapuli    ...  TCP *:65530 (LISTEN)
+      java      17427 kristinekunapuli    ...  TCP *:65531 (LISTEN)
+      java      17428 kristinekunapuli    ...  TCP *:65532 (LISTEN)
+      java      17431 kristinekunapuli    ...  TCP *:5558 (LISTEN)
+      ```
 
-- Start Name Node with `&` on the command line to put it into the background just like we did with the Data Nodes
-- use `lsof` to verify that the communication ports are up and running on the expected ports
-{: .notice--warning}
+   - Start Name Node with `&` on the command line to put it into the background just like we did with the Data Nodes 
+   - use `lsof` to verify that the communication ports are up and running on the expected ports
+   {: .notice--warning}
