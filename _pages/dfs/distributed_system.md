@@ -92,7 +92,7 @@ All data nodes are running...
 ```
 
 Some notes on the previous shell commands:
-- "&" will put the process into the background; this means we can continue to enter commands in the same terminal while the process is running
+- `&` will put the process into the background; this means we can continue to enter commands in the same terminal while the process is running
 - use `top` or `ps -ef | grep java` to verify that all Data Nodes are running
 {: .notice--warning}
 
