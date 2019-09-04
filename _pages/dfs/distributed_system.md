@@ -17,7 +17,7 @@ Distributed File Systems (DFS) allow us to store and access huge amounts of data
 There are three types of actors: Client, Name Node, and Data Node. For this project we have one Name Node that communicates with multiple Data Nodes and Clients. Data Nodes store information or "data" in fixed blocks of size 4 MB. 
 
 <img src="/assets/images/dfs/dfs_main_opt.png">
-<figcaption>General Distributed File System with N Data Nodes. While only one client is shown, multiple clients can access the system at a time.</figcaption>
+<figcaption>General Distributed File System with N Data Nodes. While only one client is shown, multiple clients can access the system simultaneously.</figcaption>
 
 
 Clients send requests to Name Node; they can either APPEND data to a file or READ from a file. For APPEND commands, Name Node finds free blocks on one or more Data Nodes for storage. With READ commands, Name collects applicable blocks from Data Nodes and assembles them in order to return to the Client.
@@ -79,5 +79,20 @@ We get writer preference for free with Java’s ReadWriteLock, i.e. if a Data No
 ## Running and Testing DFS
 This is the fun part; we get to see the DFS in action! 
 
-Creates multiple Data Node processes on unique ports. Each process is independent and does not communicate with the other Data Nodes. This means that they manage their own data and have their locks. We chose not to share memory/data structures between Data Node processes because in a physical system, a DataNode would likely be independent computer with no knowledge of any other nodes. Stderr and stdout messages are directed to a log file named DNode_<port>.log.
+We use StartDataNodes.java and [Process Builder](https://docs.oracle.com/javase/7/docs/api/java/lang/ProcessBuilder.html) to start multiple Data Node processes on unique ports - because no one wants to start 100 data nodes individually. Each process is independent and does not communicate with the other Data Nodes. This means that they manage their own data and have their locks. Stderr and stdout messages are directed to a log file named DNode_<port>.log.
+   
+Start Data Nodes on the command line:
+```shell
+pwd
+/Users/kristinekunapuli/projects/DistributedFileSystem
+startDN="java -classpath bin/ StartDataNodes"
+$startDN&
+[1] 17285
+All data nodes are running...
+```
+
+Some notes on the previous shell commands:
+- "&" will put the process into the background; this means we can continue to enter commands in the same terminal while the process is running
+- use `top` or `ps -ef | grep java` to verify that all Data Nodes are running
+{: .notice--warning}
 
