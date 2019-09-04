@@ -83,12 +83,12 @@ We use StartDataNodes.java and [Process Builder](https://docs.oracle.com/javase/
    
 1. Start Data Nodes on the command line:
 ```sh
-pwd
+$ pwd
 /Users/kristinekunapuli/projects/DistributedFileSystem
-startDN="java -classpath bin/ StartDataNodes"
-$startDN&
+$ startDN="java -classpath bin/ StartDataNodes"
+$ $startDN&
 [1] 17285
-All data nodes are running...
+$ All data nodes are running...
 ```
 
 Some notes on the previous shell commands:
@@ -98,9 +98,9 @@ Some notes on the previous shell commands:
 
 2. Start Name Node on the command line:
 ```sh 
-startNN="java -classpath bin/ NameNode"
-$startNN&
-lsof -i -n -P | grep TCP | grep java
+$ startNN="java -classpath bin/ NameNode"
+$ $startNN&
+$ lsof -i -n -P | grep TCP | grep java
 java      17426 kristinekunapuli    6u  IPv6 0xdd20bf3903ab9c7b      0t0  TCP *:65530 (LISTEN)
 java      17427 kristinekunapuli    6u  IPv6 0xdd20bf3903ab7fbb      0t0  TCP *:65531 (LISTEN)
 java      17428 kristinekunapuli    6u  IPv6 0xdd20bf3903ab62fb      0t0  TCP *:65532 (LISTEN)
