@@ -109,3 +109,8 @@ We use StartDataNodes.java and [Process Builder](https://docs.oracle.com/javase/
    - Start Name Node with `&` on the command line to put it into the background just like we did with the Data Nodes 
    - use `lsof` to verify that the communication ports are up and running on the expected ports
    {: .notice--warning}
+   
+   3. Start Client
+         ```sh
+         ```
+         
