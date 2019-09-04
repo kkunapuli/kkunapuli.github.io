@@ -81,7 +81,7 @@ This is the fun part; we get to see the DFS in action!
 
 We use StartDataNodes.java and [Process Builder](https://docs.oracle.com/javase/7/docs/api/java/lang/ProcessBuilder.html) to start multiple Data Node processes on unique ports - because no one wants to start 100 data nodes individually. Each process is independent and does not communicate with the other Data Nodes. This means that they manage their own data and have their locks. Stderr and stdout messages are directed to a log file named DNode_<port>.log.
    
-Start Data Nodes on the command line:
+1. Start Data Nodes on the command line:
 ```sh
 pwd
 /Users/kristinekunapuli/projects/DistributedFileSystem
@@ -96,3 +96,18 @@ Some notes on the previous shell commands:
 - use `top` or `ps -ef | grep java` to verify that all Data Nodes are running
 {: .notice--warning}
 
+2. Start Name Node on the command line:
+```sh 
+startNN="java -classpath bin/ NameNode"
+$startNN&
+lsof -i -n -P | grep TCP | grep java
+java      17426 kristinekunapuli    6u  IPv6 0xdd20bf3903ab9c7b      0t0  TCP *:65530 (LISTEN)
+java      17427 kristinekunapuli    6u  IPv6 0xdd20bf3903ab7fbb      0t0  TCP *:65531 (LISTEN)
+java      17428 kristinekunapuli    6u  IPv6 0xdd20bf3903ab62fb      0t0  TCP *:65532 (LISTEN)
+java      17431 kristinekunapuli    6u  IPv6 0xdd20bf3903ab743b      0t0  TCP *:5558 (LISTEN)
+```
+
+Notes:
+- Start Name Node with `&` on the command line to put it into the background just like we did with the Data Nodes
+- use `lsof` to verify that the communication ports are up and running
+{: .notice--warning}
