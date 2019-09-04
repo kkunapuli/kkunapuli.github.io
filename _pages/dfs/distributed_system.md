@@ -90,8 +90,6 @@ $ $startDN&
 [1] 17285
 $ All data nodes are running...
 ```
-
-Some notes on the previous shell commands:
 - `&` will put the process into the background; this means we can continue to enter commands in the same terminal while the process is running
 - use `top` or `ps -ef | grep java` to verify that all Data Nodes are running
 {: .notice--warning}
@@ -106,8 +104,6 @@ java      17427 kristinekunapuli    6u  IPv6 0xdd20bf3903ab7fbb      0t0  TCP *:
 java      17428 kristinekunapuli    6u  IPv6 0xdd20bf3903ab62fb      0t0  TCP *:65532 (LISTEN)
 java      17431 kristinekunapuli    6u  IPv6 0xdd20bf3903ab743b      0t0  TCP *:5558 (LISTEN)
 ```
-
-Notes:
 - Start Name Node with `&` on the command line to put it into the background just like we did with the Data Nodes
-- use `lsof` to verify that the communication ports are up and running
+- use `lsof` to verify that the communication ports are up and running on the expected ports
 {: .notice--warning}
