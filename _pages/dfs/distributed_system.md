@@ -86,31 +86,43 @@ We use StartDataNodes.java and [Process Builder](https://docs.oracle.com/javase/
       $ pwd
       /Users/kristinekunapuli/projects/DistributedFileSystem
       $ startDN="java -classpath bin/ StartDataNodes"
-      $ $startDN&
-      [1] 17285
+      $ $startDN
       $ All data nodes are running...
       ```
       
-   - `&` will put the process into the background; this means we can continue to enter commands in the same terminal while the process is running
    - use `top` or `ps -ef | grep java` to verify that all Data Nodes are running
-   {: .notice--warning}
+   - `StartDataNodes.java` stands up all Data Nodes and then exits, so there's no need to put it in the background
 
 2. Start Name Node on the command line:
       ```sh 
       $ startNN="java -classpath bin/ NameNode"
       $ $startNN&
+      $ ps -ef | grep java
+        503  2145     1   0 11:31AM ttys001    0:00.22 /usr/bin/java -classpath bin/ DataNode 65530
+        503  2146     1   0 11:31AM ttys001    0:00.22 /usr/bin/java -classpath bin/ DataNode 65531
+        503  2147     1   0 11:31AM ttys001    0:00.22 /usr/bin/java -classpath bin/ DataNode 65532
+        503  2153   785   0 11:32AM ttys001    0:00.11 /usr/bin/java -classpath bin/ NameNode
+        503  2156   785   0 11:33AM ttys001    0:00.00 grep java
       $ lsof -i -n -P | grep TCP | grep java
-      java      17426 kristinekunapuli    ...  TCP *:65530 (LISTEN)
-      java      17427 kristinekunapuli    ...  TCP *:65531 (LISTEN)
-      java      17428 kristinekunapuli    ...  TCP *:65532 (LISTEN)
-      java      17431 kristinekunapuli    ...  TCP *:5558 (LISTEN)
+        java      2145 kristinekunapuli ... TCP *:65530 (LISTEN)
+        java      2146 kristinekunapuli ... TCP *:65531 (LISTEN)
+        java      2147 kristinekunapuli ... TCP *:65532 (LISTEN)
+        java      2153 kristinekunapuli ... TCP *:5558 (LISTEN)
       ```
 
-   - Start Name Node with `&` on the command line to put it into the background just like we did with the Data Nodes 
    - use `lsof` to verify that the communication ports are up and running on the expected ports
-   {: .notice--warning}
+   - start Name Node with `&` on the command line to put it into the background; this means we can continue to enter commands in the same terminal while the process is running
    
    3. Start Client
          ```sh
+         $ startC="java -classpath bin/ Client"
+         $ $startC
+         ::
          ```
+
+   - start Client; we don't put it into the background because we interact with the Client - it is our interface with the DFS
+   - if you're new to using a terminal or shell scripting, startC="java -classpath bin/ Client" creates a variable `startC` with the contents "java -classpath bin/ Client" (which is how we start a java process on the command line)
+   - we can refer to our variable again by adding `$` in front of it, e.g. $startC
+   
+   4. Use the DFS by sending Client commands
          
