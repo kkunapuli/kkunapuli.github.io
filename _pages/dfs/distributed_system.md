@@ -118,7 +118,7 @@ We use StartDataNodes.java and [Process Builder](https://docs.oracle.com/javase/
       $ startC="java -classpath bin/ Client"
       $ $startC
       ::
-         ```
+      ```
 
    - start Client; we don't put it into the background because we interact with the Client - it is our interface with the DFS
    - if you're new to using a terminal or shell scripting, startC="java -classpath bin/ Client" creates a variable `startC` with the contents "java -classpath bin/ Client" (which is how we start a java process on the command line)
