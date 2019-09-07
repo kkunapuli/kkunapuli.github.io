@@ -16,7 +16,7 @@ Things I've had fun learning and exploring.
 ## Big Data
 
 [Distributed File System]({% link _pages/dfs/distributed_system.md %})
-: in progress
+: I had a great time designing and building a Distributed File System (DFS) with a team and thought I'd share some of the things I learned. 
 
 [MapReduce: word counter]({% link _pages/dfs/map_reduce.md %})
 : in progress
