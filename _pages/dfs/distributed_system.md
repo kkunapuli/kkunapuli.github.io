@@ -47,8 +47,8 @@ Data Node serves as the storeroom of the DFS. It has two primary data structures
 ```java
 //mark block as used
 synchronized(uLock) {
-   Block blkObj = new Block(filename);
-   used.put(block, blkObj);
+  Block blkObj = new Block(filename);
+  used.put(block, blkObj);
 }
 ```
 
@@ -74,44 +74,42 @@ import java.net.ServerSocket;
 public class DataNode {
 ServerSocket dataServer = null;
 
-   void start() {
-		//allocate port
-		try {
+  void start() {
+    //allocate port
+    try {
+      System.out.println("Running on port:" + port);
+      dataServer = new ServerSocket(port);
 
-			System.out.println("Running on port:" + port);
-			dataServer = new ServerSocket(port);
+      while (true) {
+        //use data handler to handle requests - start new thread
+        new DataNodeHandler(dataServer.accept(), this).start();
+      }
 
-			while (true) {
-				//use data handler to handle requests - start new thread
-				new DataNodeHandler(dataServer.accept(), this).start();
-			}
+    } catch (IOException e) {
+      e.printStackTrace();
 
-		} catch (IOException e) {
-			e.printStackTrace();
-
-			System.err.println("Unable to allocate port: " + port);
-			System.exit(2);
-		}
-	}
+      System.err.println("Unable to allocate port: " + port);
+      System.exit(2);
+    }
+  }
 }
 
 class DataNodeHandler extends Thread {
-	private Socket clientSocket; //connection with name node
-	private DataNode myNode; //reference to data node that spawned handler
+  private Socket clientSocket; //connection with name node
+  private DataNode myNode; //reference to data node that spawned handler
    
-	//constructor
-	public DataNodeHandler(Socket clientSocket, DataNode node) {
-		this.clientSocket  = clientSocket;
-		this.myNode = node; //data node this thread acts on
-	}
+  //constructor
+  public DataNodeHandler(Socket clientSocket, DataNode node) {
+    this.clientSocket  = clientSocket;
+    this.myNode = node; //data node this thread acts on
+  }
    
-   @Override
-	public void run(){
-		//this is where the parsing, data node commanding, and message return happens
+  @Override
+  public void run(){
+    //this is where the parsing, data node commanding, and message return happens
       ...
-   }
+  }
 }
-
 ```
 
 Data Node Handler extends Java’s Thread class and its constructor takes two arguments: the message as a String, and a `DataNode` object. The reference to Data Node is given as an argument to its thread so that Data Node Handler can perform `alloc()`, `read()`, and `write()` requests on Data Node. With using locks, a data node has to manage its own resources; thus a handler has access to a single instance of a data node (representing a unique host). If data can be modified in one place it is simpler to ensure its safety.
@@ -129,27 +127,26 @@ We get writer preference for free with Java’s ReadWriteLock, i.e. if a Data No
 ```java
 //contains a block's information (memory location, and necessary locks)
 public class Block {
-	private String filename; //file where data is stored in a data node
-	private final ReentrantReadWriteLock rwLock = new ReentrantReadWriteLock();
-	private final Lock rLock = rwLock.readLock(); //reader side of readWriteLock
-	private final Lock wLock = rwLock.writeLock(); //writer side of readWriteLock
+  private String filename; //file where data is stored in a data node
+  private final ReentrantReadWriteLock rwLock = new ReentrantReadWriteLock();
+  private final Lock rLock = rwLock.readLock(); //reader side of readWriteLock
+  private final Lock wLock = rwLock.writeLock(); //writer side of readWriteLock
 	
-	Block(String fname){ //create block with filename
-		this.filename = fname;
-	}
+  Block(String fname){ //create block with filename
+    this.filename = fname;
+  }
 	
-	String getFilename() { //get block filename
-		return this.filename;
-	}
+  String getFilename() { //get block filename
+    return this.filename;
+  }
+  
+  Lock getRLock() { //get access to read lock
+    return this.rLock;
+  }
 
-	Lock getRLock() { //get access to read lock
-		return this.rLock;
-	}
-
-	Lock getWLock() { //get access to write lock
-		return this.wLock;
-	}
-
+  Lock getWLock() { //get access to write lock
+    return this.wLock;
+  }
 }
 ```
 
