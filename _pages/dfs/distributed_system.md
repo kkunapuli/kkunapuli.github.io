@@ -45,6 +45,8 @@ When receiving an APPEND request, Name Node first splits the data into 4 MB bloc
 Data Node serves as the storeroom of the DFS. It has two primary data structures: a queue of available blocks and a hashmap of used blocks. The queue and hashmap have their own individual locks (qLock for queue and uLock for hashmap); whenever a data structure is modified, Data Node first obtains the relevant lock, modifies the data structure and then releases the lock.
 
 ```java
+import java.util.concurrent.locks.Lock;
+
 //mark block as used
 synchronized(uLock) {
   Block blkObj = new Block(filename);
@@ -125,6 +127,9 @@ Both locks are declared as final so that they cannot be modified. To emphasize t
 We get writer preference for free with Java’s ReadWriteLock, i.e. if a Data Node Handler is writing to block x1 or requests write access to x1, no readers will be given access to x1. Readers may be given access to any Block other than x1 since Blocks have independent ReadWriteLocks. We also get the ability to allow multiple readers on the same block at the same time from `ReadWriteLock`. Maximum concurrency is achieved by maintaining *separate locks for each block of data*, as seen in `Block.java`:
 
 ```java
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 //contains a block's information (memory location, and necessary locks)
 public class Block {
   private String filename; //file where data is stored in a data node
