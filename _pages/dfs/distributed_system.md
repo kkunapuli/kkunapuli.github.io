@@ -114,10 +114,10 @@ We use StartDataNodes.java and [Process Builder](https://docs.oracle.com/javase/
    - start Name Node with `&` on the command line to put it into the background; this means we can continue to enter commands in the same terminal while the process is running
    
 3. Start Client
-         ```sh
-         $ startC="java -classpath bin/ Client"
-         $ $startC
-         ::
+      ```sh
+      $ startC="java -classpath bin/ Client"
+      $ $startC
+      ::
          ```
 
    - start Client; we don't put it into the background because we interact with the Client - it is our interface with the DFS
