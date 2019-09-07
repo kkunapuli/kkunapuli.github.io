@@ -113,7 +113,7 @@ We use StartDataNodes.java and [Process Builder](https://docs.oracle.com/javase/
    - use `lsof` to verify that the communication ports are up and running on the expected ports
    - start Name Node with `&` on the command line to put it into the background; this means we can continue to enter commands in the same terminal while the process is running
    
-   3. Start Client
+3. Start Client
          ```sh
          $ startC="java -classpath bin/ Client"
          $ $startC
@@ -124,5 +124,5 @@ We use StartDataNodes.java and [Process Builder](https://docs.oracle.com/javase/
    - if you're new to using a terminal or shell scripting, startC="java -classpath bin/ Client" creates a variable `startC` with the contents "java -classpath bin/ Client" (which is how we start a java process on the command line)
    - we can refer to our variable again by adding `$` in front of it, e.g. $startC
    
-   4. Use the DFS by sending Client commands
+4. Use the DFS by sending Client commands
          
