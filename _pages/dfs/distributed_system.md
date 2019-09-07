@@ -48,7 +48,7 @@ Data Node serves as the storeroom of the DFS. It has two primary data structures
 //mark block as used
 synchronized(uLock) {
    Block blkObj = new Block(filename);
-	used.put(block, blkObj);
+   used.put(block, blkObj);
 }
 ```
 
