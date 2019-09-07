@@ -122,7 +122,30 @@ We use StartDataNodes.java and [Process Builder](https://docs.oracle.com/javase/
 
    - start Client; we don't put it into the background because we interact with the Client - it is our interface with the DFS
    - if you're new to using a terminal or shell scripting, startC="java -classpath bin/ Client" creates a variable `startC` with the contents "java -classpath bin/ Client" (which is how we start a java process on the command line)
-   - we can refer to our variable again by adding `$` in front of it, e.g. $startC
+   - we can refer to our variable again by adding `$` in front of it, e.g. `$startC`
    
 4. Use the DFS by sending Client commands
-         
+   - add data to DFS using the format `append $filname $text`; for this example create a file, a.txt, and add "first test message"
+      ```sh
+      ::append a.txt first test message
+      ```
+   - then, add a second messsage
+      ```sh
+      ::append a.txt second test message
+      ```
+   - verify contents of a.txt using read command of format `read $filename`; add a third message and read a.txt again
+      ```sh
+      ::read a.txt
+      first test message second test message
+      ::append a.txt third message
+      ::read a.txt
+      first test message second test message third message
+      ```
+   - we can add multiple files
+      ```sh
+      ::append b.txt new file
+      ::read b.txt
+      new file
+      ```
+      
+   This is a toy example, but it can easily be extended into a useful data storage/retrieval application.
