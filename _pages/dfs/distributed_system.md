@@ -113,8 +113,8 @@ We use StartDataNodes.java and [Process Builder](https://docs.oracle.com/javase/
    - use `lsof` to verify that the communication ports are up and running on the expected ports
    - start Name Node with `&` on the command line to put it into the background; this means we can continue to enter commands in the same terminal while the process is running
    
-3. Start Client
-      ```sh
+3. Start Client:
+      ```sh 
       $ startC="java -classpath bin/ Client"
       $ $startC
       ::
