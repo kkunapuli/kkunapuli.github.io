@@ -57,7 +57,7 @@ synchronized(uLock) {
 All locks have a minimal scope in order to prevent deadlock or excessive blocking.
 {: .notice--warning}
 
-Because we are simulating a DFS on a single computer, Data Node saves a block of data in its own directory: data_<port>. Each allocated block of data is represented by a file: blk_<num>.bin; Data Node does not put a limit on block filesize (Name Node handles 4MB limit). Of course, we could use a more complex file storage mechanism if warranted.
+Because we are simulating a DFS on a single computer, Data Node saves a block of data in its own directory: data_$port. Each allocated block of data is represented by a file: blk_$num.bin; Data Node does not put a limit on block filesize (Name Node handles 4MB limit). Of course, we could use a more complex file storage mechanism if warranted.
    
 In practice, Name Node and each Data Node would be on independent computers. Why did we test using a single computer? Because it's MUCH easier. With the DFS entirely contained on one computer, testing can be performed anytime, anywhere, on a single laptop.
 {: .notice--warning}
@@ -164,7 +164,7 @@ public class Block {
 ## Running and Testing DFS
 This is the fun part; we get to see the DFS in action! 
 
-We use `StartDataNodes.java` and [Process Builder](https://docs.oracle.com/javase/7/docs/api/java/lang/ProcessBuilder.html) to start multiple Data Node processes on unique ports - because no one wants to start 100 data nodes individually. Each process is independent and does not communicate with the other Data Nodes. This means that they manage their own data and have their locks. Stderr and stdout messages are directed to a log file named DNode_<port>.log.
+We use `StartDataNodes.java` and [Process Builder](https://docs.oracle.com/javase/7/docs/api/java/lang/ProcessBuilder.html) to start multiple Data Node processes on unique ports - because no one wants to start 100 data nodes individually. Each process is independent and does not communicate with the other Data Nodes. This means that they manage their own data and have their locks. Stderr and stdout messages are directed to a log file named DNode_$port.log.
    
 1. Start Data Nodes on the command line:
       ```sh
@@ -206,7 +206,7 @@ We use `StartDataNodes.java` and [Process Builder](https://docs.oracle.com/javas
       ```
 
    - start Client; we don't put it into the background because we interact with the Client - it is our interface with the DFS
-   - if you're new to using a terminal or shell scripting, `startC="java -classpath bin/ Client"` creates a variable `startC` with the contents "java -classpath bin/ Client" (which is how we start a java process on the command line)
+   - if you're new to using a terminal or shell scripting, `startC="java -classpath bin/ Client"` creates a variable `startC` with the contents `"java -classpath bin/ Client"` (which is how we start a java process on the command line)
    - we can refer to our variable again by adding `$` in front of it, e.g. `$startC`
    
 4. Use the DFS by sending Client commands
@@ -235,4 +235,4 @@ We use `StartDataNodes.java` and [Process Builder](https://docs.oracle.com/javas
       
    This is a toy example, but it can easily be extended into a useful data storage/retrieval application.
    
-   We can verify that the contents have been stored on disk by inspecting data_<port> directories. Remember that any Data Node logging information can be found in DNode_<port>.log in the working directory.
+   We can verify that the contents have been stored on disk by inspecting data_$port directories. Remember that any Data Node logging information can be found in DNode_$port.log in the working directory.
