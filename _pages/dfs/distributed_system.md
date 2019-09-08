@@ -83,7 +83,7 @@ public class DataNode {
 }
 ```
 
-All locks have a minimal scope in order to prevent deadlock or excessive blocking.
+All locks have minimal scope in order to prevent deadlock or excessive blocking.
 {: .notice--warning}
 
 Because we are simulating a DFS on a single computer, Data Node saves a block of data in its own directory: data_$port. Each allocated block of data is represented by a file: blk_$num.bin; Data Node does not put a limit on block filesize (Name Node handles 4MB limit). Of course, we could use a more complex file storage mechanism if warranted.
