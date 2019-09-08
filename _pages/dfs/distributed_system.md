@@ -26,7 +26,7 @@ It's important to utilize threads to ensure that Name Node and Data Nodes can ha
 ## Communication Design
 Name Node needs to be able to communicate with both clients and data nodes seamlessly. Thus, Name Node is a server to Clients and a client to Data Nodes. Processes share data through ports over TCP.
 
-To ensure synchronous communication, Name Node creates a thread of type 'Name Node Handler' for each Client request. The Name Node Handler then creates its own connection to Data Nodes - who are always listening on a specific port number. Name Node creates a new connection every time it wants to communicate with a Data Node.
+To ensure synchronous communication, Name Node creates a thread of type `NameNodeHandler` for each Client request. The Name Node Handler then creates its own connection to Data Nodes - who are always listening on a specific port number. Name Node creates a new connection every time it wants to communicate with a Data Node.
 
 ### Relevant Files
 - Client.java
@@ -44,13 +44,24 @@ When receiving an APPEND request, Name Node first splits the data into 4 MB bloc
 ## Data Node
 Data Node serves as the storeroom of the DFS. It has two primary data structures: a queue of available blocks and a hashmap of used blocks. The queue and hashmap have their own individual locks (qLock for queue and uLock for hashmap); whenever a data structure is modified, Data Node first obtains the relevant lock, modifies the data structure and then releases the lock.
 
+Code excerpt that shows using a lock when modifying the shared `HashMap`, `used`:
 ```java
 import java.util.concurrent.locks.Lock;
+import java.util.HashMap;
 
-//mark block as used
-synchronized(uLock) {
-  Block blkObj = new Block(filename);
-  used.put(block, blkObj);
+public class DataNode {
+  private HashMap<Integer, Block> used; //map of used blocks (filename as value)
+
+  //mark block as used
+  int alloc() {
+    ...
+    synchronized(uLock) {
+      Block blkObj = new Block(filename);
+      used.put(block, blkObj);
+    }
+    ...
+  }
+  
 }
 ```
 
