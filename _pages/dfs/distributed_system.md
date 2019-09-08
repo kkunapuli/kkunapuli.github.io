@@ -47,19 +47,37 @@ Data Node serves as the storeroom of the DFS. It has two primary data structures
 Code excerpt that shows using a lock when modifying the shared `HashMap`, `used`:
 ```java
 import java.util.concurrent.locks.Lock;
+import java.util.Queue;
 import java.util.HashMap;
 
 public class DataNode {
+  private Queue<Integer> availQ; //queue of available blocks
   private HashMap<Integer, Block> used; //map of used blocks (filename as value)
+  
+  //keep shared resources safe
+  private final Object qLock = new Object(); //for locking available block queue
+  private final Object uLock = new Object(); //for locking the used block hashmap
 
-  //mark block as used
+  //mark block as used; return block number, -1 if none available
   int alloc() {
+    //get a block
+    int block = -1; //return -1 if no blocks available
+    synchronized(qLock) {
+      if( availQ.isEmpty()) {
+        return block;
+      }
+      block = availQ.poll();
+    }
+    
     ...
+    
     synchronized(uLock) {
       Block blkObj = new Block(filename);
       used.put(block, blkObj);
     }
+    
     ...
+    
   }
   
 }
