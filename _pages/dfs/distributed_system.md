@@ -69,8 +69,8 @@ public class DataNode {
       block = availQ.poll();
     }
     
-    ...
-    
+    //make a file(name)
+    String filename = dataDir.toString() + "/blk_" + block + ".bin";
     synchronized(uLock) {
       Block blkObj = new Block(filename);
       used.put(block, blkObj);
