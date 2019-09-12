@@ -7,4 +7,6 @@ header:
    caption: "Photo by Jon Tyson on Unsplash"
 ---
 
+> Bloom filters are named for their creator, Burton Howard Bloom. They have nothing to do with plants.
+
 coming soon...
