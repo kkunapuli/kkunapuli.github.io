@@ -18,8 +18,8 @@ Things I've had fun learning and exploring.
 [Distributed File System]({% link _pages/dfs/distributed_system.md %})
 : I had a great time designing and building a Distributed File System (DFS) with a team and wanted to share some of the things I learned.
 
-[MapReduce: word counter]({% link _pages/dfs/map_reduce.md %})
+MapReduce: word counter
 : in progress
 
-[MapReduce: bloom filter]({% link _pages/dfs/bloom_filter.md %})
+MapReduce: bloom filter
 : in progress
