@@ -15,10 +15,10 @@ Things I've had fun learning and exploring.
 
 ## Big Data
 
-[Distributed File System]({% link _pages/dfs/distributed_system.md %})
+[Store ALL the Data]({% link _pages/dfs/distributed_system.md %})
 : I had a great time designing and building a Distributed File System (DFS) with a team and wanted to share some of the things I learned.
 
-MapReduce: word counter
+Split it. Map it. Send it. Reduce it!
 : in progress
 
 MapReduce: bloom filter
