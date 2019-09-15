@@ -25,12 +25,12 @@ If we're going to run multiple Mappers at the same time, we need to divide up th
 You can run a MapReduce application with as many parallel processing chains as you like. We picked four.
 {: .notice--warning}
 
-Dividing up the file happens in the Splitter. The Splitter requires three command line arguments, input filename, number of lines in the file and a number 1-4 specifying which processing chain we're starting. Because it's java, our command line looks like this: `java -classpath bin/ Splitter $filename $num_lines $i`. After the Splitter calculates the range of line numbers, it prints those lines on **stdout**.
+Dividing up the file happens in the Splitter. The Splitter requires three command line arguments, input filename, number of lines in the file and a number 1-4 specifying which processing chain we're starting. Because it is written in java, our command line looks like this: `java -classpath bin/ Splitter $filename $num_lines $i`. After the Splitter calculates the range of line numbers, it prints those lines on **stdout**.
 
-_Wait - I thought we're using pipes to communicate between processes?!?!_ We are - Unix pipes!
+*Wait - I thought we're using pipes to communicate between processes?!?!* We are - Unix pipes!
 {: .notice-warning}
 
-Stemmer is up next. It reads strings from stdin, cleans it, and prints the result on stdout. Why clean the data? We're counting unique words. Consider the sentences _"Writing is great fun. Everyone should try it out and see how much fun writing can be."_ The word "writing" appears both capitalized and lowercase; "fun" appears with and without trailing punctuation. We probably don't care how many times [stop words](https://en.wikipedia.org/wiki/Stop_words) such as "is", "it", "and" appear. 
+Stemmer is up next. It reads strings from stdin, cleans it, and prints the result on stdout. Why clean the data? Because we're counting unique words. Consider the sentences _"Writing is great fun. Everyone should try it out and see how much fun writing can be."_ The word "writing" appears both capitalized and lowercase; "fun" appears with and without trailing punctuation. We probably don't care how many times [stop words](https://en.wikipedia.org/wiki/Stop_words) such as "is", "it", & "and" appear. 
 
 If you consider proper nouns, especially ones that aren't always proper such as "apple" the fruit and "Apple" the company, cleaning text can get more complicated. We're keeping it simple for now.
 {: .notice-warning}
