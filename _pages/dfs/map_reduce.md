@@ -114,6 +114,7 @@ $ ls
 		$ cat lines.txt | wc -l
      		 400
 		```
+		
 	A couple reasons why I like vim:
 	- it's available on even the most lightweight systems
 	- sometimes I just want to quickly edit a file without waiting for a text editor to start
@@ -124,7 +125,7 @@ $ ls
 	Run the entire MapReduce application with a single terminal command:
 	`script/driver.sh $test_file $port`
 	
-	Use whatever (free) port number you like - we just need to make sure Sender and Reducer use the same one. Here, $test_file is lines.txt that we just created.
+	Use whatever (free) port number you like - we just need to make sure Sender and Reducer use the same one. Here, `$test_file` is lines.txt that we just created.
 	
 	I also added a Unix time command to demonstrate that our application is indeed using four threads of execution.
 	
@@ -134,7 +135,8 @@ $ ls
 		 user	0m2.050s
 		 sys	0m0.787s
 		```
-		As we can see from the time output, our application took 519 ms of “wall clock time” to execute. More interesting is that it spent 2050 ms CPU time executing. That’s approximately 4 times longer than our wall clock estimate! *This is exactly what we would expect when starting four different (but equally loaded) processes to execute in parallel.* Our application did indeed use four parallel processes to count the number of unique word occurrences in lines.txt.
+		
+	As we can see from the time output, our application took 519 ms of “wall clock time” to execute. More interesting is that it spent 2050 ms CPU time executing. That’s approximately 4 times longer than our wall clock estimate! *This is exactly what we would expect when starting four different (but equally loaded) processes to execute in parallel.* Our application did indeed use four parallel processes to count the number of unique word occurrences in lines.txt.
 		
 3. Inspect results
 
@@ -148,7 +150,8 @@ $ ls
 		 writing 400
 		 fun 400
 		```
-	As you can see from the screenshot, “is”, “a”, and “of” were removed as stop words. The “.” was removed from text and it was matched correctly to the other instance of text in the second sentence. All remaining words were sent to the Mapper and Reducer and aggregated correctly. If there was an error in concurrency or synchronization, we would likely see repeated words with differing counts or incorrect counts.
+		
+	As you can see from the terminal output, “is”, “a”, and “of” were removed as stop words. The “.” was removed from text and it was matched correctly to the other instance of text in the second sentence. All remaining words were sent to the Mapper and Reducer and aggregated correctly. If there was an error in concurrency or synchronization, we would likely see repeated words with differing counts or incorrect counts.
 	
 	*Why aren't the words ordered?* Because we use a hashmap to store unique words and their current count. We achieve O(1) lookup but sacrifice any kind of ordering. Even if we listed words in the order they were received in the Reducer, we wouldn't be guaranteed the same order as the original file without significantly more synchronization overhead.
 	{: .notice--warning}
