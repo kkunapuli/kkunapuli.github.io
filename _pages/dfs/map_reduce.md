@@ -60,11 +60,46 @@ Mappers can also perform filtering. For example, we might only be interested in 
 - Sender.java
 
 ## Reduce it.
+There’s only one instance of the Reducer but four processing chains feed it information. In addition to processing input in a new thread, the Reducer must protect its intermediate results so that threads are not blocked and they don’t step on each other with a race condition. Without protecting the intermediate results, we could easily end up with multiple threads trying to add to the list of counts at the same time and end up with the wrong answer. 
+
+The Reducer stores all intermediate results in a hash map where the key is the word and the value is a list of numbers (e.g. count). To avoid a race condition while allowing concurrency for maximum throughput, we synchronize the threads and protect the hashmap with a lock. 
+
+```java
+public boolean update(String key, int val) {
+  //update word table with the key and value
+  synchronized(wordLock){
+    if(wordTable.containsKey(key)) {
+	   //key exists; update entry
+		wordTable.get(key).add(val);
+    }
+	 else {
+      //key doesn't exist yet; add new entry
+      ArrayList<Integer> tmpList = new ArrayList<Integer>();
+      tmpList.add(val);
+      wordTable.put(key, tmpList);
+      }
+    }
+  return true;
+}
+```
+
+All threads share one lock with minimal scope and no dependencies in order to prevent deadlock. Threads only need to acquire a lock when they are modifying the hash map, `wordTable`. 
 
 ### Relevant Files
 - Reducer.java
 
 ## Drive it!
+We tested our MapReduce application along component boundaries (e.g. Splitter, Stemmer, etc) but the real fun is running all components end-to-end.
+
+Running and testing the MapReduce application is straight-forward when using the bash script driver.sh. The driver script starts the Reducer, then calls the Splitter-Stemmer-Mapper-Sender chain four times. All Reducer output is redirected to a file reduce_results.txt in the current working directory. Reducer output location can easily be changed by updating driver.sh. 
+
+Here’s an example test scenario to demonstrate the MapReduce application. All steps assume you’re running from the MapReduce directory with script, and bin directories present.
+```sh
+$ pwd
+/Users/kkunapuli/projects/MapReduce
+$ ls
+bin	script	src
+```
 
 ### Relevant Files
 - script/driver.sh
