@@ -27,7 +27,7 @@ You can run a MapReduce application with as many parallel processing chains as y
 
 Dividing up the file happens in the Splitter. The Splitter requires three command line arguments, input filename, number of lines in the file and a number 1-4 specifying which processing chain we're starting. Because it's java, our command line looks like this: `java -classpath bin/ Splitter $filename $num_lines $i`. After the Splitter calculates the range of line numbers, it prints those lines on **stdout**.
 
-_Wait - I thought we were using pipes to communicate between processes?!?!_ We are - Unix pipes!
+_Wait - I thought we're using pipes to communicate between processes?!?!_ We are - Unix pipes!
 {: .notice-warning}
 
 Stemmer is up next. It reads strings from stdin, cleans it, and prints the result on stdout. Why clean the data? We're counting unique words. Consider the sentences _"Writing is great fun. Everyone should try it out and see how much fun writing can be."_ The word "writing" appears both capitalized and lowercase; "fun" appears with and without trailing punctuation. We probably don't care how many times [stop words](https://en.wikipedia.org/wiki/Stop_words) such as "is", "it", "and" appear. 
