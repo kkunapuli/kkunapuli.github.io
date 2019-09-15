@@ -102,6 +102,7 @@ $ ls
 ```
 
 1. Make a test file
+
 	Using vim, we have a test file (lines.txt) that repeats “Here is a test line of text. Writing text is fun.” 400 times. It will test both stop word removal and accurate counting of words. Because “is”, “a”, and “of” are all stop words, we expect the final result to be 400 counts each of “here”, “test”, “line”, “writing”, and “fun”. Because “text” appears twice, it should have a count of 800. The text line will also test capitalization and punctuation removal.
 	
 		```sh
@@ -116,13 +117,15 @@ $ ls
 		```
 		
 	A couple reasons why I like vim:
-	- it's available on even the most lightweight systems
-	- sometimes I just want to quickly edit a file without waiting for a text editor to start
-	- once you learn the [commands](https://vim.rtorr.com/), vim is incredibly powerful
+		- it's available on even the most lightweight systems
+		- sometimes I just want to quickly edit a file without waiting for a text editor to start
+		- once you learn the [commands](https://vim.rtorr.com/), vim is incredibly powerful
 	{: .notice--warning}
 	
 2. Run MapReduce application
+
 	Run the entire MapReduce application with a single terminal command:
+	
 	`script/driver.sh $test_file $port`
 	
 	Use whatever (free) port number you like - we just need to make sure Sender and Reducer use the same one. Here, `$test_file` is lines.txt that we just created.
@@ -141,6 +144,7 @@ $ ls
 3. Inspect results
 
 	All reducer output is directed to reduce_results.txt. It should contain a list of unique words in the input text file along with a count. In this case, we expect six unique words, text will have a count of 800, all others will have a count of 400.
+	
 		```sh
 		$cat reduce_results.txt 
 		 text 800
