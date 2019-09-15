@@ -96,10 +96,64 @@ Running and testing the MapReduce application is straight-forward when using the
 Here’s an example test scenario to demonstrate the MapReduce application. All steps assume you’re running from the MapReduce directory with script, and bin directories present.
 ```sh
 $ pwd
-/Users/kkunapuli/projects/MapReduce
+ /Users/kkunapuli/projects/MapReduce
 $ ls
-bin	script	src
+ bin	script	src
 ```
+
+1. Make a test file
+	Using vim, we have a test file (lines.txt) that repeats “Here is a test line of text. Writing text is fun.” 400 times. It will test both stop word removal and accurate counting of words. Because “is”, “a”, and “of” are all stop words, we expect the final result to be 400 counts each of “here”, “test”, “line”, “writing”, and “fun”. Because “text” appears twice, it should have a count of 800. The text line will also test capitalization and punctuation removal.
+	
+		```sh
+		$ cat lines.txt | head -5
+		 Here is a test line of text. Writing text is fun.
+		 Here is a test line of text. Writing text is fun.
+		 Here is a test line of text. Writing text is fun.
+		 Here is a test line of text. Writing text is fun.
+		 Here is a test line of text. Writing text is fun.
+		$ cat lines.txt | wc -l
+     		 400
+		```
+	A couple reasons why I like vim:
+	- it's available on even the most lightweight systems
+	- sometimes I just want to quickly edit a file without waiting for a text editor to start
+	- once you learn the [commands](https://vim.rtorr.com/), vim is incredibly powerful
+	{: .notice--warning}
+	
+2. Run MapReduce application
+	Run the entire MapReduce application with a single terminal command:
+	`script/driver.sh $test_file $port`
+	
+	Use whatever (free) port number you like - we just need to make sure Sender and Reducer use the same one. Here, $test_file is lines.txt that we just created.
+	
+	I also added a Unix time command to demonstrate that our application is indeed using four threads of execution.
+	
+		```sh
+		$ time script/driver.sh lines.txt 778
+		 real	0m0.519s
+		 user	0m2.050s
+		 sys	0m0.787s
+		```
+		As we can see from the time output, our application took 519 ms of “wall clock time” to execute. More interesting is that it spent 2050 ms CPU time executing. That’s approximately 4 times longer than our wall clock estimate! *This is exactly what we would expect when starting four different (but equally loaded) processes to execute in parallel.* Our application did indeed use four parallel processes to count the number of unique word occurrences in lines.txt.
+		
+3. Inspect results
+
+	All reducer output is directed to reduce_results.txt. It should contain a list of unique words in the input text file along with a count. In this case, we expect six unique words, text will have a count of 800, all others will have a count of 400.
+		```sh
+		$cat reduce_results.txt 
+		 text 800
+		 test 400
+		 here 400
+		 line 400
+		 writing 400
+		 fun 400
+		```
+	As you can see from the screenshot, “is”, “a”, and “of” were removed as stop words. The “.” was removed from text and it was matched correctly to the other instance of text in the second sentence. All remaining words were sent to the Mapper and Reducer and aggregated correctly. If there was an error in concurrency or synchronization, we would likely see repeated words with differing counts or incorrect counts.
+	
+	*Why aren't the words ordered?* Because we use a hashmap to store unique words and their current count. We achieve O(1) lookup but sacrifice any kind of ordering. Even if we listed words in the order they were received in the Reducer, we wouldn't be guaranteed the same order as the original file without significantly more synchronization overhead.
+	{: .notice--warning}
+	
+4. Driver script anatomy
 
 ### Relevant Files
 - script/driver.sh
