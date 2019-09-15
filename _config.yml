@@ -108,7 +108,7 @@ analytics:
 author:
   name             : "Kristine Kunapuli"
   avatar           : "assets/images/profile_pic_otimized_opt.jpg" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "sharing explorations in machine learning, data visualization, and python"
+  bio              : "sharing explorations in machine learning, big data, and python"
   location         : "Texas"
   email            : "kgarot@gmail.com"
   links:
