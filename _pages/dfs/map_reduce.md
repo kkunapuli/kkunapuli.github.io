@@ -11,10 +11,7 @@ header:
 
 September, 2019
 
-MapReduce has the best name: a MapReduce framework **maps** items to values and **reduces** the `(item, value)` pairs into answers. The trick is there's many Mappers operating at the same time on their own slice of data. 
-
-Mapper pairs are usually referred to as `(key, value)` pairs.
-{: .notice--warning}
+MapReduce has the best name: a MapReduce framework **maps** items to values and **reduces** the `(item, value)` pairs into answers. The trick is there's many Mappers operating at the same time on their own slice of data. From now on, we'll refer to Mapper pairs as `(key, value)` pairs [as per usual](https://docs.oracle.com/javase/tutorial/collections/interfaces/map.html).
 
 **insert figure here**
 
