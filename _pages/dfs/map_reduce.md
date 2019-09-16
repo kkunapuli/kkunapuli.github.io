@@ -126,6 +126,7 @@ public class Reducer{
       handleMessage(inputLine);
       cyclicBarrier.await();
     }
+  } // end of ReducerHandler class
 
   //Runs 'Tally Results' when the cyclic barrier is completed
   class AggregatorThread implements Runnable{ 
@@ -150,8 +151,9 @@ public class Reducer{
     public void run() {
       tallyResults();
     }
-  } 
+  } // end of AggregatorThread class 
 }
+```
 
 ### Relevant Files
 - Reducer.java
