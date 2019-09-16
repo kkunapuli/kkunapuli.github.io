@@ -1,5 +1,5 @@
 ---
-title:  "Split it. Map it. Send it. Reduce it!"
+title:  "Split it. Map it. Send it. Count it!"
 layout: single
 author_profile: true
 header:
@@ -56,6 +56,11 @@ Mappers can also perform filtering. For example, we might only be interested in 
 
 ## Send it.
 
+Sender is quite simple. Given an IP address and port number, it connects to the Reducer. It receives Mapper `(key, value)` pairs on stdin and passes them on to Reducer without making any modifications. 
+
+To keep testing easy, Sender and Reducer are independent processes on the same local machine. By changing the IP address (and perhaps adding a ssh key) we can easily make this work across *multiple machines*.
+{: .notice--warning}
+
 ### Relevant Files
 - Sender.java
 
@@ -101,66 +106,139 @@ $ ls
  bin	script	src
 ```
 
-1. Make a test file
+###Make a test file
 
-	Using vim, we have a test file (lines.txt) that repeats “Here is a test line of text. Writing text is fun.” 400 times. It will test both stop word removal and accurate counting of words. Because “is”, “a”, and “of” are all stop words, we expect the final result to be 400 counts each of “here”, “test”, “line”, “writing”, and “fun”. Because “text” appears twice, it should have a count of 800. The text line will also test capitalization and punctuation removal.
+Using vim, we have a test file (lines.txt) that repeats “Here is a test line of text. Writing text is fun.” 400 times. It will test both stop word removal and accurate counting of words. Because “is”, “a”, and “of” are all stop words, we expect the final result to be 400 counts each of “here”, “test”, “line”, “writing”, and “fun”. Because “text” appears twice, it should have a count of 800. The text line will also test capitalization and punctuation removal.
 	
-		```sh
-		$ cat lines.txt | head -5
-		 Here is a test line of text. Writing text is fun.
-		 Here is a test line of text. Writing text is fun.
-		 Here is a test line of text. Writing text is fun.
-		 Here is a test line of text. Writing text is fun.
-		 Here is a test line of text. Writing text is fun.
-		$ cat lines.txt | wc -l
-     		 400
-		```
+```sh
+$ cat lines.txt | head -5
+Here is a test line of text. Writing text is fun.
+Here is a test line of text. Writing text is fun.
+Here is a test line of text. Writing text is fun.
+Here is a test line of text. Writing text is fun.
+Here is a test line of text. Writing text is fun.
+$ cat lines.txt | wc -l
+400
+```
 		
-	A couple reasons why I like vim:
-		- it's available on even the most lightweight systems
-		- sometimes I just want to quickly edit a file without waiting for a text editor to start
-		- once you learn the [commands](https://vim.rtorr.com/), vim is incredibly powerful
-	{: .notice--warning}
+A couple reasons why I like *vim*:
+- it's available on even the most lightweight systems
+- sometimes I just want to quickly edit a file without waiting for a text editor to start
+- once you learn the [commands](https://vim.rtorr.com/), vim is incredibly powerful
+{: .notice--warning}
 	
-2. Run MapReduce application
+###Run MapReduce application
 
-	Run the entire MapReduce application with a single terminal command:
+Run the entire MapReduce application with a single terminal command:
 	
-	`script/driver.sh $test_file $port`
+`script/driver.sh $test_file $port`
 	
-	Use whatever (free) port number you like - we just need to make sure Sender and Reducer use the same one. Here, `$test_file` is lines.txt that we just created.
+Use whatever (free) port number you like - we just need to make sure Sender and Reducer use the same one. Here, `$test_file` is lines.txt that we just created.
 	
-	I also added a Unix time command to demonstrate that our application is indeed using four threads of execution.
+I also added a Unix time command to demonstrate that our application is indeed using four threads of execution.
 	
-		```sh
-		$ time script/driver.sh lines.txt 778
-		 real	0m0.519s
-		 user	0m2.050s
-		 sys	0m0.787s
-		```
+```sh
+$ time script/driver.sh lines.txt 778
+real	0m0.519s
+user	0m2.050s
+sys	0m0.787s
+```
 		
-	As we can see from the time output, our application took 519 ms of “wall clock time” to execute. More interesting is that it spent 2050 ms CPU time executing. That’s approximately 4 times longer than our wall clock estimate! *This is exactly what we would expect when starting four different (but equally loaded) processes to execute in parallel.* Our application did indeed use four parallel processes to count the number of unique word occurrences in lines.txt.
+As we can see from the time output, our application took 519 ms of “wall clock time” to execute. More interesting is that it spent 2050 ms CPU time executing. That’s approximately 4 times longer than our wall clock estimate! *This is exactly what we would expect when starting four different (but equally loaded) processes to execute in parallel.* Our application did indeed use four parallel processes to count the number of unique word occurrences in lines.txt.
 		
-3. Inspect results
+###Inspect results
 
-	All reducer output is directed to reduce_results.txt. It should contain a list of unique words in the input text file along with a count. In this case, we expect six unique words, text will have a count of 800, all others will have a count of 400.
+All reducer output is directed to reduce_results.txt. It should contain a list of unique words in the input text file along with a count. In this case, we expect six unique words, text will have a count of 800, all others will have a count of 400.
 	
-		```sh
-		$cat reduce_results.txt 
-		 text 800
-		 test 400
-		 here 400
-		 line 400
-		 writing 400
-		 fun 400
-		```
+```sh
+$ cat reduce_results.txt 
+text 800
+test 400
+here 400
+line 400
+writing 400
+fun 400
+```
 		
-	As you can see from the terminal output, “is”, “a”, and “of” were removed as stop words. The “.” was removed from text and it was matched correctly to the other instance of text in the second sentence. All remaining words were sent to the Mapper and Reducer and aggregated correctly. If there was an error in concurrency or synchronization, we would likely see repeated words with differing counts or incorrect counts.
+As you can see from the terminal output, “is”, “a”, and “of” were removed as stop words. The “.” was removed from text and it was matched correctly to the other instance of text in the second sentence. All remaining words were sent to the Mapper and Reducer and aggregated correctly. If there was an error in concurrency or synchronization, we would likely see repeated words with differing counts or incorrect counts.
 	
-	*Why aren't the words ordered?* Because we use a hashmap to store unique words and their current count. We achieve O(1) lookup but sacrifice any kind of ordering. Even if we listed words in the order they were received in the Reducer, we wouldn't be guaranteed the same order as the original file without significantly more synchronization overhead.
-	{: .notice--warning}
+*Why aren't the words ordered?* Because we use a hashmap to store unique words and their current count. We achieve O(1) lookup but sacrifice any kind of ordering. Even if we listed words in the order they were received in the Reducer, we wouldn't be guaranteed the same order as the original file without significantly more synchronization overhead.
+{: .notice--warning}
 	
-4. Driver script anatomy
+###Driver script anatomy
+
+It’s great that our script properly executed a MapReduce application, but let’s get into the details of how everything is executed.
+
+It’s straight-forward to call a Java program from the terminal. All you need to  know is the location of the compiled class file, the name of the class, and any required command line arguments. In this case, because we’re running from the MapReduce parent directory, class path is simply bin/. The class names for each process are simple: Splitter, Stemmer, Mapper, Sender, and Reducer. Splitter and Sender require command line arguments and they’re added to the end of the command, e.g. $filename in $cmdSplit. 
+
+```sh
+#assume system is being run from project directory
+cpath="bin/"
+
+cmdSplit="java -classpath $cpath Splitter $filename $num_lines"
+cmdStem="java -classpath $cpath Stemmer"
+cmdMap="java -classpath $cpath Mapper"
+cmdSend="java -classpath $cpath Sender $redHost $redPort"
+cmdReduce="java -classpath $cpath Reducer"
+```
+
+Using the Java Reduce command we just built, start the Reducer. We want to store the output in a file so we can inspect it later, so add `> $output_file` after the command. This will redirect everything from Reducer stdout to `$output_file`. In this case, we’re using reduce_results.txt as our output file. 
+
+We also want to put the Reducer in the background using “&”. Otherwise our script will “run” forever but never reach other commands; it will be stuck waiting for the Reducer to finish. Since the Reducer is dependent on the MapReduce processing chain we’re going to call next, the Reducer will never finish and we get stuck.
+
+```sh
+ # start reducer
+($cmdReduce > reduce_results.txt) &
+```
+
+Just like we did for the Reducer, we want to put the MapReduce processing chain in the background and save the pid.  We’re going to kick off four processing chains to run at the same time and we want to wait for all to finish at the end.
+
+```sh
+#keep array of pids
+pid_arr=(0 0 0 0)
+
+#start all processes in background
+for i in 1 2 3 4; do
+    #make the command for splitter i
+	fullCmdSplit="$cmdSplit $i"
+	
+	#start all processes
+	($fullCmdSplit | $cmdStem | $cmdMap | $cmdSend) &
+	pid=$!
+	
+	#store pid
+	idx=`echo "$i - 1" | bc -l`
+	pid_arr[$idx]=$pid
+	
+done
+
+#wait on all pids
+for p in "${pid_arr[@]}"; do
+	wait $p
+done
+```
+
+If we run the Splitter, Stemmer, or Mapper on its own we’ll see its output in the terminal because it’s written to stdout. Since the Stemmer, Mapper, and Sender read from stdin we can also test them as standalones by directing a string to their stdin and examining the terminal output. For example, I can test the Stemmer with echo and a pipe:
+
+```sh
+$ echo "World is greeted!" | $cmdStem
+world greeted
+```
+
+Echo prints our string “world greeted” to stdout, but instead of being displayed in the terminal pipe redirects it to Stemmer stdin. We see Stemmer’s stdout in the terminal and are happy to note the stop word “is” has been removed.
+
+It’s important that our processes read from stdin and write to stdout because it allows us to connect them with unix pipes instead of TCP/port communication! Unix pipes are a lot simpler to use, and it makes our code easier to test. It also makes it easier to change the code for a different MapReduce application. We could even insert a C or Python script in the processing chain if we wanted!
+
+A unix pipe simply directs stdout from the first process to stdin of the second process. It’s used all the time to chain together unix commands. In fact, we’ve used it many times already: to get a line count of our input file and print only the first five lines of our test file. 
+{: .notice--warning}
+
+So far we’ve only talked about chaining together two processes but unix doesn’t limit us. We can chain together multiple processes. In fact, that’s exactly what we’ve done in the driver script: Splitter output is sent to Stemmer’s stdin, Stemmer’s stdout is sent to Mapper’s stdin, and Mapper’s stdout is redirected to Sender’s stdin. Sender connects with Reducer through traditional TCP/port communication.
+
+Again, we want to put the processes into the background so that we can have four processing chains running at the same time. You’ll notice we update the Splitter command a little. We add the “quarter” number to use. The Splitter needs to know which quarter of the file it’s printing on stdout. We add this in the for-loop so that we can reuse as much of the command as possible. (It makes debugging and fixing typos easier.)
+
+We want to save and store the pid of the processing chain using `$!`. We use a command line calculator, `bc -l`, to do a little math and subtract one from “quarter” to get the array index. We also could have made our array with five elements and skipped index 0.
+
+And that's all there is to it!
 
 ### Relevant Files
 - script/driver.sh
