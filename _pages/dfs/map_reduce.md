@@ -171,7 +171,7 @@ $ ls
  bin	script	src
 ```
 
-###Make a test file
+### Make a test file
 
 Using vim, we have a test file (lines.txt) that repeats “Here is a test line of text. Writing text is fun.” 400 times. It will test both stop word removal and accurate counting of words. Because “is”, “a”, and “of” are all stop words, we expect the final result to be 400 counts each of “here”, “test”, “line”, “writing”, and “fun”. Because “text” appears twice, it should have a count of 800. The text line will also test capitalization and punctuation removal.
 	
@@ -192,7 +192,7 @@ A couple reasons why I like *vim*:
 - once you learn the [commands](https://vim.rtorr.com/), vim is incredibly powerful
 {: .notice--warning}
 	
-###Run MapReduce application
+### Run MapReduce application
 
 Run the entire MapReduce application with a single terminal command:
 	
@@ -211,7 +211,7 @@ sys	0m0.787s
 		
 As we can see from the time output, our application took 519 ms of “wall clock time” to execute. More interesting is that it spent 2050 ms CPU time executing. That’s approximately 4 times longer than our wall clock estimate! *This is exactly what we would expect when starting four different (but equally loaded) processes to execute in parallel.* Our application did indeed use four parallel processes to count the number of unique word occurrences in lines.txt.
 		
-###Inspect results
+### Inspect results
 
 All reducer output is directed to reduce_results.txt. It should contain a list of unique words in the input text file along with a count. In this case, we expect six unique words, text will have a count of 800, all others will have a count of 400.
 	
@@ -230,7 +230,7 @@ As you can see from the terminal output, “is”, “a”, and “of” were re
 *Why aren't the words ordered?* Because we use a hashmap to store unique words and their current count. We achieve O(1) lookup but sacrifice any kind of ordering. Even if we listed words in the order they were received in the Reducer, we wouldn't be guaranteed the same order as the original file without significantly more synchronization overhead.
 {: .notice--warning}
 	
-###Driver script anatomy
+### Driver script anatomy
 
 It’s great that our script properly executed a MapReduce application, but let’s get into the details of how everything is executed.
 
