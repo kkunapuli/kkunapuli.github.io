@@ -159,9 +159,9 @@ public class Reducer{
 - Reducer.java
 
 ## Drive it!
-We tested our MapReduce application along component boundaries (e.g. Splitter, Stemmer, etc) but the real fun is running all components end-to-end.
+We tested our MapReduce application along component boundaries (e.g. Splitter, Stemmer, etc) but the real fun is **running all components end-to-end**.
 
-Running and testing the MapReduce application is straight-forward when using the bash script driver.sh. The driver script starts the Reducer, then calls the Splitter-Stemmer-Mapper-Sender chain four times. All Reducer output is redirected to a file reduce_results.txt in the current working directory. Reducer output location can easily be changed by updating driver.sh. 
+Running and testing the MapReduce application is straight-forward when using the bash script driver.sh. The driver script starts the Reducer, then calls the Splitter-Stemmer-Mapper-Sender chain four times. All Reducer output is redirected to a text file named reduce_results.txt in the current working directory. Reducer output location can easily be changed by updating driver.sh. 
 
 Here’s an example test scenario to demonstrate the MapReduce application. All steps assume you’re running from the MapReduce directory with script, and bin directories present.
 ```sh
@@ -173,7 +173,7 @@ $ ls
 
 ### Make a test file
 
-Using vim, we have a test file (lines.txt) that repeats “Here is a test line of text. Writing text is fun.” 400 times. It will test both stop word removal and accurate counting of words. Because “is”, “a”, and “of” are all stop words, we expect the final result to be 400 counts each of “here”, “test”, “line”, “writing”, and “fun”. Because “text” appears twice, it should have a count of 800. The text line will also test capitalization and punctuation removal.
+Using vim, we have a test file (lines.txt) that repeats “Here is a test line of text. Writing text is fun.” 400 times. It will test both stop word removal and accurate counting of words. Because “is”, “a”, and “of” are all stop words, we expect the final result to be 400 counts each of “here”, “test”, “line”, “writing”, and “fun”. Because “text” appears twice, it should have a count of 800. Our test case will also exercise capitalization and punctuation removal.
 	
 ```sh
 $ cat lines.txt | head -5
@@ -190,15 +190,12 @@ A couple reasons why I like *vim*:
 - it's available on even the most lightweight systems
 - sometimes I just want to quickly edit a file without waiting for a text editor to start
 - once you learn the [commands](https://vim.rtorr.com/), vim is incredibly powerful
-{: .notice--warning}
 	
 ### Run MapReduce application
 
-Run the entire MapReduce application with a single terminal command:
+Run the entire MapReduce application with a single terminal command: `script/driver.sh $test_file $port`
 	
-`script/driver.sh $test_file $port`
-	
-Use whatever (free) port number you like - we just need to make sure Sender and Reducer use the same one. Here, `$test_file` is lines.txt that we just created.
+Use whatever (free) port number you like - we just need to make sure Sender and Reducer use the same one. Here, `$test_file` is the lines.txt that we just created.
 	
 I also added a Unix time command to demonstrate that our application is indeed using four threads of execution.
 	
@@ -209,7 +206,7 @@ user	0m2.050s
 sys	0m0.787s
 ```
 		
-As we can see from the time output, our application took 519 ms of “wall clock time” to execute. More interesting is that it spent 2050 ms CPU time executing. That’s approximately 4 times longer than our wall clock estimate! *This is exactly what we would expect when starting four different (but equally loaded) processes to execute in parallel.* Our application did indeed use four parallel processes to count the number of unique word occurrences in lines.txt.
+As we can see from the time output, our application took 519 ms of “wall clock time” to execute. More interesting is that it spent 2050 ms CPU time executing. That’s approximately 4 times longer than our wall clock estimate! **This is exactly what we would expect when starting four different (but equally loaded) processes to execute in parallel.** Our application did indeed use four parallel processes to count the number of unique word occurrences in lines.txt.
 		
 ### Inspect results
 
