@@ -18,7 +18,7 @@ Things I've had fun learning and exploring.
 [Store ALL the Data]({% link _pages/dfs/distributed_system.md %})
 : I had a great time designing and building a Distributed File System (DFS) with a team and wanted to share some of the things I learned.
 
-Split it. Map it. Send it. Reduce it!
+Split it. Map it. Send it. Count it!
 : in progress
 
 MapReduce: bloom filter
