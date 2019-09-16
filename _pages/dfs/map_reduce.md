@@ -9,11 +9,12 @@ header:
 
 >When I think of MapReduce, I picture an army of robots shuffling numbers.
 
-September, 2019
+September 16, 2019
 
 MapReduce has the best name: a MapReduce framework **maps** items to values and **reduces** the `(item, value)` pairs into answers. The trick is there's many Mappers operating at the same time on their own slice of data. From now on, we'll refer to Mapper pairs as `(key, value)` pairs [as per usual](https://docs.oracle.com/javase/tutorial/collections/interfaces/map.html).
 
-**insert figure here**
+<img src="/assets/images/dfs/Slide3.png">
+<figcaption>Simplified MapReduce flow. Input data is split and divided between Mappers. Then, Mappers convert data into (key, value) pairs and send to a single Reducer. Finally, Reducer combines like data into a single, reportable answer.</figcaption>
 
 MapReduce and [distributed file systems](https://kkunapuli.github.io/_pages/dfs/distributed_system/) go together like peanut butter and jelly. Because the Mappers perform independent calculations, their data products can be stored on separate machines in a distributed system.  
  
