@@ -186,7 +186,7 @@ $ cat lines.txt | wc -l
 400
 ```
 		
-A couple reasons why I like *vim*:
+A couple reasons why I like **vim**:
 - it's available on even the most lightweight systems
 - sometimes I just want to quickly edit a file without waiting for a text editor to start
 - once you learn the [commands](https://vim.rtorr.com/), vim is incredibly powerful
@@ -210,7 +210,7 @@ As we can see from the time output, our application took 519 ms of “wall clock
 		
 ### Inspect results
 
-All reducer output is directed to reduce_results.txt. It should contain a list of unique words in the input text file along with a count. In this case, we expect six unique words, text will have a count of 800, all others will have a count of 400.
+All reducer output is directed to reduce_results.txt. It should contain a list of unique words in the input text file along with a count. In this case, we expect six unique words. All words except "text" will have a count of 400. Because it appears twice in our test line, "text" will have a count of 800.
 	
 ```sh
 $ cat reduce_results.txt 
@@ -222,16 +222,18 @@ writing 400
 fun 400
 ```
 		
-As you can see from the terminal output, “is”, “a”, and “of” were removed as stop words. The “.” was removed from text and it was matched correctly to the other instance of text in the second sentence. All remaining words were sent to the Mapper and Reducer and aggregated correctly. If there was an error in concurrency or synchronization, we would likely see repeated words with differing counts or incorrect counts.
+As you can see from the terminal output, “is”, “a”, and “of” were removed as stop words. The “.” was removed from text and it was matched correctly to the other instance of text in the second sentence. All remaining words were sent to the Mapper and Reducer and aggregated correctly. If we made a concurrency or synchronization error, there would probably be repeated words with differing counts or incorrect counts.
 	
-*Why aren't the words ordered?* Because we use a hashmap to store unique words and their current count. We achieve O(1) lookup but sacrifice any kind of ordering. Even if we listed words in the order they were received in the Reducer, we wouldn't be guaranteed the same order as the original file without significantly more synchronization overhead.
+*Why aren't the words ordered?* Because we use a **hashmap** to store unique words and their current count. We achieve O(1) lookup but sacrifice any kind of ordering. Even if we listed words in the order they were received in the Reducer, we wouldn't be guaranteed the same order as the original file without introducing a significant amount of overhead.
 {: .notice--warning}
 	
 ### Driver script anatomy
 
 It’s great that our script properly executed a MapReduce application, but let’s get into the details of how everything is executed.
 
-It’s straight-forward to call a Java program from the terminal. All you need to  know is the location of the compiled class file, the name of the class, and any required command line arguments. In this case, because we’re running from the MapReduce parent directory, class path is simply bin/. The class names for each process are simple: Splitter, Stemmer, Mapper, Sender, and Reducer. Splitter and Sender require command line arguments and they’re added to the end of the command, e.g. $filename in $cmdSplit. 
+It’s straight-forward to call a Java program from the terminal. All you need to  know is the location of the compiled class file, the name of the class, and any required command line arguments. 
+
+In this case, because we’re running from the MapReduce parent directory, class path is simply `bin/`. The class names for each process are simple: Splitter, Stemmer, Mapper, Sender, and Reducer. Splitter and Sender require command line arguments and they’re added to the end of the command, e.g. `$filename` in `$cmdSplit`. 
 
 ```sh
 #assume system is being run from project directory
@@ -244,16 +246,19 @@ cmdSend="java -classpath $cpath Sender $redHost $redPort"
 cmdReduce="java -classpath $cpath Reducer"
 ```
 
-Using the Java Reduce command we just built, start the Reducer. We want to store the output in a file so we can inspect it later, so add `> $output_file` after the command. This will redirect everything from Reducer stdout to `$output_file`. In this case, we’re using reduce_results.txt as our output file. 
+Using `$cmdReduce` from above, start the Reducer. Add `> $output_file` after the command to store output in a file so we can inspect it later. This will redirect everything from Reducer stdout to `$output_file`. In this case, we’re using reduce_results.txt as our output file. 
 
-We also want to put the Reducer in the background using “&”. Otherwise our script will “run” forever but never reach other commands; it will be stuck waiting for the Reducer to finish. Since the Reducer is dependent on the MapReduce processing chain we’re going to call next, the Reducer will never finish and we get stuck.
+We also want to put the Reducer in the background using “&”. Otherwise our script will be stuck waiting for the Reducer to finish - which can't happen without the `Split | Stem | Map | Send` chain.
 
 ```sh
  # start reducer
 ($cmdReduce > reduce_results.txt) &
 ```
 
-Just like we did for the Reducer, we want to put the MapReduce processing chain in the background and save the pid.  We’re going to kick off four processing chains to run at the same time and we want to wait for all to finish at the end.
+Just like we did for the Reducer, we want to put the MapReduce processing chain in the background and save the process ID (pid).  We’re going to kick off four processing chains to run at the same time and we want to wait for all to finish at the end.
+
+Waiting for all pids to finish is a poor man's bash barrier.
+{: .notice--warning}
 
 ```sh
 #keep array of pids
@@ -280,27 +285,25 @@ for p in "${pid_arr[@]}"; do
 done
 ```
 
-If we run the Splitter, Stemmer, or Mapper on its own we’ll see its output in the terminal because it’s written to stdout. Since the Stemmer, Mapper, and Sender read from stdin we can also test them as standalones by directing a string to their stdin and examining the terminal output. For example, I can test the Stemmer with echo and a pipe:
+If we run the Splitter, Stemmer, or Mapper on its own we’ll see its output in the terminal because it’s written to stdout. Stemmer, Mapper, and Sender read from stdin allowing us to test them as standalones. First direct a string to their stdin then examine the terminal output. For example, I can test the Stemmer with echo and a pipe:
 
 ```sh
-$ echo "World is greeted!" | $cmdStem
+$ echo "World is greeted." | $cmdStem
 world greeted
 ```
 
-Echo prints our string “world greeted” to stdout, but instead of being displayed in the terminal pipe redirects it to Stemmer stdin. We see Stemmer’s stdout in the terminal and are happy to note the stop word “is” has been removed.
+Echo prints our string “World is greeted.” to stdout, but redirects it to Stemmer stdin instead of displaying it in the terminal. We see Stemmer’s stdout in the terminal and are happy to note punctuation and the stop word “is” has been removed.
 
-It’s important that our processes read from stdin and write to stdout because it allows us to connect them with unix pipes instead of TCP/port communication! Unix pipes are a lot simpler to use, and it makes our code easier to test. It also makes it easier to change the code for a different MapReduce application. We could even insert a C or Python script in the processing chain if we wanted!
+It’s important that our processes read from stdin and write to stdout because it allows us to **connect them with unix pipes instead of TCP/port communication**! Unix pipes are a lot simpler to use, and it makes our code easier to test. It also makes it easier to change the code for a different MapReduce application. We could even insert a C or Python script in the processing chain if we wanted!
 
-A unix pipe simply directs stdout from the first process to stdin of the second process. It’s used all the time to chain together unix commands. In fact, we’ve used it many times already: to get a line count of our input file and print only the first five lines of our test file. 
+A unix pipe simply directs stdout from the first process to stdin of the second process. It’s used all the time to chain together unix commands. In fact, we’ve used it many times already: to get a line count of our input file, `cat $filename | wc -l`, and print only the first five lines of our test file, `cat lines.txt | head -5`. 
 {: .notice--warning}
 
-So far we’ve only talked about chaining together two processes but unix doesn’t limit us. We can chain together multiple processes. In fact, that’s exactly what we’ve done in the driver script: Splitter output is sent to Stemmer’s stdin, Stemmer’s stdout is sent to Mapper’s stdin, and Mapper’s stdout is redirected to Sender’s stdin. Sender connects with Reducer through traditional TCP/port communication.
-
-Again, we want to put the processes into the background so that we can have four processing chains running at the same time. You’ll notice we update the Splitter command a little. We add the “quarter” number to use. The Splitter needs to know which quarter of the file it’s printing on stdout. We add this in the for-loop so that we can reuse as much of the command as possible. (It makes debugging and fixing typos easier.)
+So far we’ve only talked about chaining together two processes but Unix doesn’t limit us. **We can chain together multiple processes.** In fact, that’s exactly what we’ve done in the driver script: Splitter output is sent to Stemmer’s stdin, Stemmer’s stdout is sent to Mapper’s stdin, and Mapper’s stdout is redirected to Sender’s stdin. Sender connects with Reducer through traditional TCP/port communication.
 
 We want to save and store the pid of the processing chain using `$!`. We use a command line calculator, `bc -l`, to do a little math and subtract one from “quarter” to get the array index. We also could have made our array with five elements and skipped index 0.
 
-And that's all there is to it!
+And that's all there is to it! Next, we'll switch out the Mapper to solve a different problem. 
 
 ### Relevant Files
 - script/driver.sh
