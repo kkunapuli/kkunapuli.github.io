@@ -29,7 +29,7 @@ You can run a MapReduce application with as many parallel processing chains as y
 
 Dividing up the file happens in the Splitter. The Splitter requires three command line arguments, input filename, number of lines in the file and a number 1-4 specifying which processing chain we're starting. Because it is written in java, our command line looks like this: `java -classpath bin/ Splitter $filename $num_lines $i`. After the Splitter calculates the range of line numbers, it prints those lines on **stdout**.
 
-*Wait - I thought we're using pipes to communicate between processes?!?!* We are - Unix pipes!
+*Wait - I thought we're using pipes to communicate between processes?!?!* **We are - Unix pipes!**
 {: .notice--warning}
 
 Stemmer is up next. It reads strings from stdin, cleans it, and prints the result on stdout. Why clean the data? Because we're counting unique words. Consider the sentences _"Programming is great fun. Everyone should try it and see how much fun programming can be."_ The word "programming" appears both capitalized and lowercase; "fun" appears with and without trailing punctuation. We probably don't care how many times [stop words](https://en.wikipedia.org/wiki/Stop_words) such as "is", "it", & "and" appear. 
@@ -58,37 +58,100 @@ Mappers can also perform filtering. For example, we might only be interested in 
 
 Sender is quite simple. Given an IP address and port number, it connects to the Reducer. It receives Mapper `(key, value)` pairs on stdin and passes them on to Reducer without making any modifications. 
 
-To keep testing easy, Sender and Reducer are independent processes on the same local machine. By changing the IP address (and perhaps adding a ssh key) we can easily make this work across *multiple machines*.
+To keep testing easy, Sender and Reducer are independent processes on the same local machine. By changing the IP address (and perhaps adding an ssh key) we can easily make this work across *multiple machines*.
 {: .notice--warning}
 
 ### Relevant Files
 - Sender.java
 
 ## Reduce it.
-There’s only one instance of the Reducer but four processing chains feed it information. In addition to processing input in a new thread, the Reducer must protect its intermediate results so that threads are not blocked and they don’t step on each other with a race condition. Without protecting the intermediate results, we could easily end up with multiple threads trying to add to the list of counts at the same time and end up with the wrong answer. 
+There’s only one instance of the Reducer yet four processing chains feed it information. In addition to handling each input source in a new thread, the Reducer must protect its intermediate results. If shared data structures aren't protected, **threads can step on each other, cause a race condition, and result in the wrong answer**. 
 
-The Reducer stores all intermediate results in a hash map where the key is the word and the value is a list of numbers (e.g. count). To avoid a race condition while allowing concurrency for maximum throughput, we synchronize the threads and protect the hashmap with a lock. 
+The Reducer stores all intermediate results in a hash map where the key is the word and the value is a list of numbers. To avoid a race condition without blocking, we synchronize the threads and protect the hashmap with a lock. 
 
 ```java
-public boolean update(String key, int val) {
-  //update word table with the key and value
-  synchronized(wordLock){
-    if(wordTable.containsKey(key)) {
-	   //key exists; update entry
-		wordTable.get(key).add(val);
-    }
-	 else {
-      //key doesn't exist yet; add new entry
-      ArrayList<Integer> tmpList = new ArrayList<Integer>();
-      tmpList.add(val);
-      wordTable.put(key, tmpList);
+import java.util.ArrayList;
+import java.util.HashMap;
+public class Reducer{
+
+  //hash table storing words and list of counts
+  private static HashMap<String, ArrayList<Integer>> wordTable; 
+  //use a lock for the table
+  private final static Object wordLock = new Object();
+  
+  ...
+  
+  public boolean update(String key, int val) {
+    //update word table with the key and value
+    synchronized(wordLock){
+      if(wordTable.containsKey(key)) {
+        //key exists; update entry
+	wordTable.get(key).add(val);
+      }
+      else {
+        //key doesn't exist yet; add new entry
+        ArrayList<Integer> tmpList = new ArrayList<Integer>();
+        tmpList.add(val);
+        wordTable.put(key, tmpList);
       }
     }
-  return true;
+    return true;
+  }
 }
 ```
 
 All threads share one lock with minimal scope and no dependencies in order to prevent deadlock. Threads only need to acquire a lock when they are modifying the hash map, `wordTable`. 
+
+Another fun aspect of Reducer is the barrier. How does Reducer know when it has received all the inputs and it can add up the results? It utilizes a [cyclic barrier](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/CyclicBarrier.html). Barriers force a wait until the specified number of threads have finished executing. Then, an `AggregatorThread` takes over. It adds up the number of occurrences for each word and prints the result.
+
+```java
+import java.util.concurrent.CyclicBarrier;
+public class Reducer{
+  private static CyclicBarrier cyclicBarrier;
+  
+  //constructor
+  public Reducer(){
+    wordTable = new HashMap<String, ArrayList<Integer>>();
+    cyclicBarrier = new CyclicBarrier(4,new AggregatorThread());
+  }
+  
+  //REDUCER HANDLER
+  private static class ReducerHandler extends Thread implements Runnable{
+    public void run() {//read the input
+      
+      ...
+      
+      //This is where the work is done by the ReducerHandler, 
+      //takes the input line and parses it
+      handleMessage(inputLine);
+      cyclicBarrier.await();
+    }
+
+  //Runs 'Tally Results' when the cyclic barrier is completed
+  class AggregatorThread implements Runnable{ 
+    public void tallyResults() {
+      for(String key: wordTable.keySet()){
+        // get list of numbers for key
+	ArrayList<Integer> counts = wordTable.get(key);
+	int total = addAll(counts);
+	System.out.println(key + " " + String.valueOf(total));
+      }
+    }
+
+    private int addAll(ArrayList<Integer> counts) {
+      int sum = 0;
+      for(int val: counts) {
+        sum += val;
+      }
+      return sum;
+    }
+
+    @Override
+    public void run() {
+      tallyResults();
+    }
+  } 
+}
 
 ### Relevant Files
 - Reducer.java
