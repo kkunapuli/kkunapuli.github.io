@@ -16,6 +16,7 @@ MapReduce has the best name: a MapReduce framework **maps** items to values and 
 <img src="/assets/images/dfs/Slide3.png">
 <figcaption>Simplified MapReduce flow. Input data is split and divided between Mappers. Then, Mappers convert data into (key, value) pairs and send to a single Reducer. Finally, Reducer combines like data into a single, reportable answer.</figcaption>
 
+
 MapReduce and [distributed file systems](https://kkunapuli.github.io/_pages/dfs/distributed_system/) go together like peanut butter and jelly. Because the Mappers perform independent calculations, their data products can be stored on separate machines in a distributed system.  
  
 [MapReduce comes from Google](https://ai.google/research/pubs/pub62), but other technologies such as Spark and [Hadoop](https://www.tutorialspoint.com/hadoop/hadoop_mapreduce.htm) use a MapReduce framework too. Google has since developed [other technologies](https://ai.google/research/pubs/pub41378) that replaced MapReduce however it is still used in batch processing and there's plenty of value in learning MapReduce's simple approach to parallelism at scale.
