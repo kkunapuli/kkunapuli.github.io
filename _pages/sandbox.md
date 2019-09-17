@@ -19,7 +19,7 @@ Things I've had fun learning and exploring.
 : I had a great time designing and building a Distributed File System (DFS) with a team and wanted to share some of the things I learned.
 
 [Split it. Map it. Send it. Count it!]({% link _pages/dfs/distributed_system.md %})
-:  With a team, I explored concurrency and synchonization by creating a mapreduce application. It's a simple use case - count the number of occurrences of unique words - but requires muilti-threading, locks, and a barrier to get it right.
+:  With a team, I explored concurrency and synchonization by creating a MapReduce application. It's a simple use case - count the number of occurrences of unique words - but requires muilti-threading, locks, and a barrier to get it right.
 
 MapReduce: bloom filter
 : in progress
