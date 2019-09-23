@@ -260,9 +260,6 @@ compress_html:
 # Defaults
 defaults:
   # _posts
-  _pages:
-    values:
-      comments: true
   - scope:
       path: ""
       type: posts
