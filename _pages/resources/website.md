@@ -3,7 +3,7 @@ title:  "Tools for Adding Content"
 layout: single
 author_profile: true
 header:
-   image: /assets/images/japan-opt.jpg
+   image: /assets/images/japan_opt.jpg
 ---
 
 > I took this picture around Akihabara in Tokyo, Japan while I was an intern at Japan Central Railways.
