@@ -25,7 +25,7 @@ As you decide how to host your site, you need to consider if you want to create 
 ## Customizing Pages
 
 Changing colors and choosing pictures was a lot of fun for me. You can be very precise by specifying colors in html color codes. I found a great website that will even suggest color collections for building a theme.
-- (HTML Color Codes)[https://htmlcolorcodes.com/]
+- [HTML Color Codes](https://htmlcolorcodes.com/)
 
 My first few splash pages were scans of my own artwork. When I started, I had designs hanging on my wall ready to go. Obviously creating something new every time I wanted to create a new page isn't sustainable. Luckily there's plenty of fun, interesting, and free photographs avilalable. So far I've been enjoying Unsplash.
 - [Unsplash](https://unsplash.com/)
