@@ -3,10 +3,9 @@ title:  "Tools for Adding Content"
 layout: single
 author_profile: true
 header:
-   image: /assets/images/japan_opt.jpg
+   image: /assets/images/billy-huynh-W8KTS-mhFUE-unsplash_opt.jpg
+   caption: "Photo by Pranav Billy Huynh on Unsplash"
 ---
-
-> I took this picture around Akihabara in Tokyo, Japan while I was an intern at Japan Central Railways.
 
 October 3rd, 2019
 
@@ -20,5 +19,9 @@ There's a LOT of options out there for creating your own blog or website. You ca
 As you decide how to host your site, you need to consider if you want to create your own layout, use ready-made formatting, or customize an available template. Because of its extensive documentation (and clean look) I went with Minimal Mistakes. I decided to fork the project to allow for maximal customization.
 - [Minimal Mistakes](https://mmistakes.github.io/minimal-mistakes/)
 
+## Customizing pages
+(html colors, splash pages, resizing images)
 
+## Adding content
+(markdown references)
 
