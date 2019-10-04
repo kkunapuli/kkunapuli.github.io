@@ -23,3 +23,7 @@ Things I've had fun learning and exploring.
 
 MapReduce: bloom filter
 : in progress
+
+## Resources
+[Tools for Adding Content]({% link _pages/resources/website.md %})
+: Everything I found helpful in building and adding to this site.
