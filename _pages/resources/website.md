@@ -11,7 +11,7 @@ October 3rd, 2019
 
 It seems a common first post for a new blog is a "making your own" how-to. To all of you out there: thank you!!! It helped me immensely while starting my own website. Here's a collection of my favorite tools / documentation / information sources so far.
 
-This is intended to be a 'working page' I can update with new finds.
+This is intended to be a 'working page' I can update with new finds - but I promise to add, not modify.
 {: .notice--warning}
 
 ## Getting Started: choosing a platform and layout
