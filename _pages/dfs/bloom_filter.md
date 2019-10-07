@@ -32,6 +32,63 @@ Indices for 673 filter size:
 <figcaption>Probability of False Positive vs. Bloom Filter Size. False positives are less frequent with larger filter sizes.</figcaption>
 - using Java's [BitSet](https://docs.oracle.com/javase/7/docs/api/java/util/BitSet.html)
 
+```java
+import java.util.BitSet;
+private static class Filter{
+	BitSet filter;
+	int filterSize = 0;
+	Filter(String filterFile) throws NumberFormatException, IOException{
+			
+		//open filter file and create filter
+		File file = new File(filterFile);
+		BufferedReader br = new BufferedReader(new FileReader(file));
+			
+		// create bitmap
+		filterSize = Integer.valueOf(br.readLine());
+		filter = new BitSet(filterSize);
+			
+		// for each marked element in filter, update bitmap
+		String s;
+		while((s = br.readLine()) != null) {
+			filter.set(Integer.valueOf(s));
+		}
+			
+		br.close();
+	}
+		
+	boolean isSet(int bit) {
+		return filter.get(bit);
+	}
+		
+	int getIndex(String word) {
+		int index = word.hashCode()%filterSize;
+		if(index < 0) {
+			index += filterSize;
+		}
+			
+		return index;
+	}
+}
+```
+
+now our mapper looks like this:
+```java
+// print word + "1" for counting
+public Mapper(String line, Filter filter) // filter may be null
+{
+	String[] tokens = line.split(" ");
+	for(String temp: tokens)
+	{
+		temp = temp.toLowerCase();
+			
+		if(filter == null || filter.isSet(filter.getIndex(temp))){
+			temp += " 1";
+			stringList.add(temp);
+		}
+	}
+}
+```
+
 ## Getting a Baseline
 run alice in wonderland without any changes
 $ time script/driver.sh alice_in_wonderland.txt 778 # count everything
