@@ -21,6 +21,8 @@ More background [here](https://en.wikipedia.org/wiki/Bloom_filter)
 - finding a test case [Project Gutenberg](https://www.gutenberg.org/)
 - finding and setting a false alarm rate, see image
 <img src="/assets/images/prob_FA.png">
+<figcaption>Probability of False Positive vs. Bloom Filter Size. False positives are less frequent with larger filter sizes.</figcaption>
+
 - create some filters and write out just the "hits" (sparse compression)
 `Indices for 79 filter size:
 [67, 75, 20, 18, 65, 53, 55, 67]
@@ -29,45 +31,45 @@ Indices for 673 filter size:
 
 - memory usage for these?
 
-<figcaption>Probability of False Positive vs. Bloom Filter Size. False positives are less frequent with larger filter sizes.</figcaption>
+
 - using Java's [BitSet](https://docs.oracle.com/javase/7/docs/api/java/util/BitSet.html)
 
 ```java
 import java.util.BitSet;
 private static class Filter{
-	BitSet filter;
-	int filterSize = 0;
-	Filter(String filterFile) throws NumberFormatException, IOException{
+  BitSet filter;
+  int filterSize = 0;
+  Filter(String filterFile) throws NumberFormatException, IOException{
 			
-		//open filter file and create filter
-		File file = new File(filterFile);
-		BufferedReader br = new BufferedReader(new FileReader(file));
+    //open filter file and create filter
+    File file = new File(filterFile);
+    BufferedReader br = new BufferedReader(new FileReader(file));
 			
-		// create bitmap
-		filterSize = Integer.valueOf(br.readLine());
-		filter = new BitSet(filterSize);
+    // create bitmap
+    filterSize = Integer.valueOf(br.readLine());
+    filter = new BitSet(filterSize);
 			
-		// for each marked element in filter, update bitmap
-		String s;
-		while((s = br.readLine()) != null) {
-			filter.set(Integer.valueOf(s));
-		}
+    // for each marked element in filter, update bitmap
+    String s;
+    while((s = br.readLine()) != null) {
+      filter.set(Integer.valueOf(s));
+    }
 			
-		br.close();
-	}
+    br.close();
+  }
 		
-	boolean isSet(int bit) {
-		return filter.get(bit);
-	}
+    boolean isSet(int bit) {
+      return filter.get(bit);
+    }
 		
-	int getIndex(String word) {
-		int index = word.hashCode()%filterSize;
-		if(index < 0) {
-			index += filterSize;
-		}
+    int getIndex(String word) {
+    int index = word.hashCode()%filterSize;
+    if(index < 0) {
+      index += filterSize;
+    }
 			
-		return index;
-	}
+    return index;
+  }
 }
 ```
 
@@ -76,16 +78,16 @@ now our mapper looks like this:
 // print word + "1" for counting
 public Mapper(String line, Filter filter) // filter may be null
 {
-	String[] tokens = line.split(" ");
-	for(String temp: tokens)
-	{
-		temp = temp.toLowerCase();
+  String[] tokens = line.split(" ");
+  for(String temp: tokens)
+  {
+    temp = temp.toLowerCase();
 			
-		if(filter == null || filter.isSet(filter.getIndex(temp))){
-			temp += " 1";
-			stringList.add(temp);
-		}
-	}
+    if(filter == null || filter.isSet(filter.getIndex(temp))){
+      temp += " 1";
+      stringList.add(temp);
+    }
+  }
 }
 ```
 
