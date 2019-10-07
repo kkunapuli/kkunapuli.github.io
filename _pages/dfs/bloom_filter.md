@@ -20,7 +20,7 @@ More background [here](https://en.wikipedia.org/wiki/Bloom_filter)
 ## Project Setup
 - finding a test case [Project Gutenberg](https://www.gutenberg.org/)
 - finding and setting a false alarm rate, see image
-<img src="/assets/images/dfs/prob_FA.png">
+<img src="/assets/images/prob_FA.png">
 - create some filters and write out just the "hits" (sparse compression)
 `Indices for 79 filter size:
 [67, 75, 20, 18, 65, 53, 55, 67]
