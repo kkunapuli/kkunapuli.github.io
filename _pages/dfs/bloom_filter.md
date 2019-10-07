@@ -10,3 +10,119 @@ header:
 > Bloom filters are named for their creator, Burton Howard Bloom. They have nothing to do with plants.
 
 coming soon...
+
+## Bloom Filter Background
+This link is great: [Bloom Filters by Example](https://llimllib.github.io/bloomfilter-tutorial/)
+More background [here](https://en.wikipedia.org/wiki/Bloom_filter)
+
+**insert image here**
+
+## Project Setup
+- finding a test case [Project Gutenberg](https://www.gutenberg.org/)
+- finding and setting a false alarm rate, see image
+<img src="/assets/images/dfs/prob_FA.png">
+- create some filters and write out just the "hits" (sparse compression)
+`Indices for 79 filter size:
+[67, 75, 20, 18, 65, 53, 55, 67]
+Indices for 673 filter size:
+[101, 294, 619, 579, 4, 409, 611, 42]`
+
+- memory usage for these?
+
+<figcaption>Probability of False Positive vs. Bloom Filter Size. False positives are less frequent with larger filter sizes.</figcaption>
+- using Java's [BitSet](https://docs.oracle.com/javase/7/docs/api/java/util/BitSet.html)
+
+## Getting a Baseline
+run alice in wonderland without any changes
+$ time script/driver.sh alice_in_wonderland.txt 778 # count everything
+real	0m0.719s
+user	0m3.713s
+sys	0m0.772s
+
+Some results: (~3k unique words)
+Some numbers in there that indicate we could improve our filtering
+$ sort -k 1 reduce_results.all.txt | tail -10
+yet 25
+you 481
+young 5
+your 71
+yours 3
+yourself 10
+youth 6
+zealand 1
+zigzag 1
+zip 1
+
+## Try with ~10% Probability of False Positive
+```sh
+$ time script/driver.sh alice_in_wonderland.txt 778 bloom_filter.79.txt 
+real	0m0.634s
+user	0m3.414s
+sys	0m0.786s
+
+$ cat reduce_results.79.txt | wc -l
+     286 # this is about 10% of 3k unique words
+```
+
+## Try with ~ 1% Probability of False Positive
+```sh
+$ time script/driver.sh alice_in_wonderland.txt 778 bloom_filter.673.txt 
+real	0m0.588s
+user	0m3.324s
+sys	0m0.747s
+
+$ cat reduce_results.673.txt | wc -l
+      36 # about 1% of 3k unique words
+```
+
+All the words:
+**alice 403**
+because 16
+binary 1
+books 2
+**cake 3**
+**cat 37**
+**computer 2**
+different 10
+directions 3
+draggled 1
+e 29
+end 20
+fallen 4
+fifteen 1
+fortunately 1
+**hatter 56**
+held 4
+hiss 1
+jaw 1
+kind 8
+kiss 1
+learned 1
+leave 9
+never 48
+order 3
+out 118
+**queen 75**
+**rabbit 51**
+say 51
+sends 1
+solid 1
+speed 1
+strange 5
+**tea 19**
+top 8
+water 5
+
+## So, what does this all mean?
+We would actually check for inclusion in our list of words before printing results (probably at the reducer) but I let it all go through so we could see what it really means to have a false positive rate
+
+Didn't save that much time...
+
+In reality, we would have a much larger set to check against; we'd be better off using a traditional set and having P(FP) = 0.
+
+
+
+
+
+
+
