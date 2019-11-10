@@ -222,9 +222,9 @@ All the words (filter words in **bold**):
 * top 8
 * water 5
 
-In a production applications, we would check for inclusion in our list of words before printing results (probably at the Reducer level). I skipped that step here so we could see what it really means to have a false positive rate. In the end, the filter reduced timing by 0.5 seconds or 13%. It's not a huge improvement, but it didn't take much effort to implement either...
+In a production application, we would check for inclusion in our list of words before printing results (probably at the Reducer level). I skipped that step here so we could see what it really means to have a false positive rate. In the end, the filter reduced timing by 0.5 seconds or 13%. It's not a huge improvement, but it didn't take much effort to implement either...
 
-Becaus our set of words is so small, we'd be better off using a traditional set and having zero probability of false positives. The differnce in memory usage would be negligible and our output would only included the words of interest. Coding it up would also be simpler with a built-in set.
+Because our set of words is so small, we'd be better off using a traditional set and having zero probability of false positives. The differnce in memory usage would be negligible and our output would only included the words of interest. Coding it up would also be simpler with a built-in set.
 
 
 
