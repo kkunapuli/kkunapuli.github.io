@@ -34,9 +34,13 @@ I intentionally am not verifying set inclusion with this application. I **want**
 
 I downloaded a text version of _Alice in Wonderland_ from [Project Gutenberg](https://www.gutenberg.org/) for testing. Then, I decided on a list of eight words to count: `alice, cake, cat, hatter, rabbit, queen, tea`. I threw in `computer` for fun. 
 
-Next, I set the filter size based on a desired false positive rate. This is an experiment, so I decided to make two filters: one with ~10% probability and one with ~1% probability for false alarms. To keep things simple, I stuck with one hash function (a Java built-in). 
+Next, I set the **filter size based on a desired false positive rate**. This is an experiment, so I decided to make two filters: one with ~10% probability and one with ~1% probability for false alarms. To keep things simple, I stuck with one hash function (a Java built-in). Probability of false positives, `P(FP)` is given by:
 
-<a href="https://www.codecogs.com/eqnedit.php?latex=\LARGE&space;(1-e^{\frac{kn}{m}})^{k}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\LARGE&space;(1-e^{\frac{kn}{m}})^{k}" title="\LARGE (1-e^{\frac{kn}{m}})^{k}" /></a>
+<a href="https://www.codecogs.com/eqnedit.php?latex=\LARGE&space;\mathbb{P}(FP)&space;=&space;(1-e^{\frac{kn}{m}})^{k}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\LARGE&space;\mathbb{P}(FP)&space;=&space;(1-e^{\frac{kn}{m}})^{k}" title="\LARGE \mathbb{P}(FP) = (1-e^{\frac{kn}{m}})^{k}" /></a>
+
+- k is the number of hash functions used
+- m is the total number of bits in the filter
+- n is the size of our word list, e.g. number of items inserted in the filter
 
 Using more hash functions allows you to use less memory without allowing more false postives, but it also requires more computations and can slow down the application. 
 {: .notice--warning}
