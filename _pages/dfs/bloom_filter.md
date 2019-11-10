@@ -52,7 +52,7 @@ Using more hash functions allows you to use less memory without allowing more fa
 <img src="/assets/images/prob_FA.png">
 <figcaption>Probability of False Positive vs. Bloom Filter Size (n=8). False positives are less frequent with larger filter sizes.</figcaption>
 
-From the plot, if we want a 10% P(FP), we need a filter with 79 bits. We increase the filter size to 673 bits for a 1% P(FP). I had a few options for storing the filters on disk. I could have saved the raw bitmap in a binary file which would be very compact but not easily interpreted or verified. Instead, I saved only the index locations with a '1' or 'true', e.g. "hits". It's still compact, but it's much easier to inspect and understand.
+From the plot, if we want a 10% P(FP), we need a filter with 79 bits. We increase the filter size to 673 bits for a 1% P(FP). I had a few options for storing the filters on disk. I could have saved the raw bitmap in a binary file which would be very compact but not easily interpreted or verified. Instead, I saved only the index locations with a `1` or `true`, e.g. "hits". It's still compact, but it's much easier to inspect and understand.
 
 ```
 Indices for 79 filter size:
