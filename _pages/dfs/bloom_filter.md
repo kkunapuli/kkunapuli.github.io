@@ -1,5 +1,5 @@
 ---
-title:  "\'Bloom\'ing Fast Filter"
+title:  "\'Bloom\'ing Efficient Filter"
 layout: single
 author_profile: true
 header:
