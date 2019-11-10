@@ -1,5 +1,5 @@
 ---
-title:  "Count Selected Words using Bloom Filter"
+title:  "\'Bloom\'ing Fast Filter"
 layout: single
 author_profile: true
 header:
@@ -9,16 +9,28 @@ header:
 
 > Bloom filters are named for their creator, Burton Howard Bloom. They have nothing to do with plants.
 
-coming soon...
+November 10th, 2019
 
 ## Bloom Filter Background
-This link is great: [Bloom Filters by Example](https://llimllib.github.io/bloomfilter-tutorial/)
-More background [here](https://en.wikipedia.org/wiki/Bloom_filter)
+A [bloom filter](https://en.wikipedia.org/wiki/Bloom_filter) is a probabilistic data structure. It's used to quickly exclude obviously irrelevant information in exchange for tolerating some false positives. A bloom filter can say "no, this item definitely doesn't belong", or "this item might belong, but I could be wrong". The best part is that the false alarm positive can be calculated _and controlled_.
 
 **insert image here**
 
+Bloom filters function a lot like a hash table, but they use memory much more efficiently. A bloom filter uses less memory because it doesn't deal with collisions, so it has no need to store the actual item. In fact, all we need is **one bit** to store  `true` or `false`. This means that a bloom filter can be computed once, stored in a compact bitmap, and loaded on startup or as needed. 
+
+To check if an item is in the desired set, simply hash it and check the corresponding bit in the bitmap. If the bit is toggled to 0, there's no way this item is in the desired set. If the bit is set to 1, this item _might_ be in the desired set or it _might_ be a collision, e.g. two items that hash to the same value. [Bloom Filters by Example](https://llimllib.github.io/bloomfilter-tutorial/) allows you to create and play with your own filter.
+
+If you're familiar with [handling collisions]https://en.wikipedia.org/wiki/Hash_table#Collision_resolution) in a hash table, you're aware that multiple items (e.g. words) can hash to the same value. We try to avoid this by using a larger hash table, but some collisions will happen no matter what. In a bloom filter, we use the number of hash functions and the size of the filter to control the desired false positive rate. 
+
 ## Project Setup
-- finding a test case [Project Gutenberg](https://www.gutenberg.org/)
+
+The first step of a designing a good experiment is to identify a test case and declare an expected outcome. Let's find a large text file, and count a specific set of words. I would expect this to be faster than counting _all_ words.
+
+I intentionally am not verifying set inclusion with this application. I **want** the false positives to be reported at the end; I'm going to measure the actual false positive rate and compare it to the rate predicted by the filter design. In practice the application would double check any bits set to 1 before reporting. 
+{: .notice--warning}
+
+I downloaded a text version of _Alice in Wonderland_ from [Project Gutenberg](https://www.gutenberg.org/) for testing. Then, I decided on a list of eight words to count: `alice, cake, cat, hatter, rabbit, queen, tea`. I threw in `computer` for fun. 
+
 - finding and setting a false alarm rate, see image
 <img src="/assets/images/prob_FA.png">
 <figcaption>Probability of False Positive vs. Bloom Filter Size. False positives are less frequent with larger filter sizes.</figcaption>
