@@ -38,7 +38,7 @@ We'll see some surprising words in the results (such as computer) because I left
 
 ### Generate Bloom Filters
 
-Next, I set the **filter size based on a desired false positive rate**. This is an experiment, so I decided to make two filters: one with ~10% probability and one with ~1% probability of false positives. To keep things simple, I stuck with one hash function (a Java built-in). Probability of false positives, `P(FP)`, is given by:
+Next, I set the **filter size based on a desired false positive rate**. This is an experiment, so I decided to make two filters: one with ~10% probability and one with ~1% probability of false positives. To keep things simple, I stuck with one hash function (a Java built-in). Probability of false positives, `P(FP)`, is _approximately_:
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=\LARGE&space;\mathbb{P}(FP)&space;=&space;(1-e^{\frac{kn}{m}})^{k}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\LARGE&space;\mathbb{P}(FP)&space;=&space;(1-e^{\frac{kn}{m}})^{k}" title="\LARGE \mathbb{P}(FP) = (1-e^{\frac{kn}{m}})^{k}" /></a>
 
