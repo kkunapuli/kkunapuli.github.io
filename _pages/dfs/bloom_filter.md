@@ -11,7 +11,6 @@ header:
 
 November 10th, 2019
 
-## Bloom Filter Background
 A [bloom filter](https://en.wikipedia.org/wiki/Bloom_filter) is a probabilistic data structure. It's used to quickly exclude obviously irrelevant information in exchange for tolerating some false positives. A bloom filter can say "no, this item definitely doesn't belong", or "this item might belong, but it might not". The best part is that the false alarm positive can be calculated _and controlled_.
 
 **insert image here**
@@ -33,6 +32,9 @@ I intentionally am not verifying set inclusion with this application. I **want**
 {: .notice--warning}
 
 I downloaded a text version of _Alice in Wonderland_ from [Project Gutenberg](https://www.gutenberg.org/) for testing. Then, I decided on a list of seven words to count: `alice, cake, cat, hatter, rabbit, queen, tea`. I threw in `computer` for fun, which brings the total to eight. 
+
+We'll see some surprising words in the results (such as computer) because I left the Project Gutenberg license in the text flie.
+{: .notice--warning}
 
 ### Generate Bloom Filters
 
@@ -167,24 +169,24 @@ $ cat reduce_results.673.txt | wc -l
 ```
 
 All the words:
-**alice 403**
-because 16
-binary 1
-books 2
-**cake 3**
-**cat 37**
-**computer 2**
-different 10
-directions 3
-draggled 1
-e 29
-end 20
-fallen 4
-fifteen 1
-fortunately 1
-**hatter 56**
-held 4
-hiss 1
+* **alice 403**
+* because 16
+* binary 1
+* books 2
+* **cake 3**
+* **cat 37**
+* **computer 2**
+* different 10
+* directions 3
+* draggled 1
+* e 29
+* end 20
+* fallen 4
+* fifteen 1
+* fortunately 1
+* **hatter 56**
+* held 4
+* hiss 1
 jaw 1
 kind 8
 kiss 1
