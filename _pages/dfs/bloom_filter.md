@@ -44,9 +44,9 @@ Next, I set the **filter size based on a desired false positive rate**. This is 
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=\LARGE&space;\mathbb{P}(FP)&space;=&space;(1-e^{\frac{kn}{m}})^{k}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\LARGE&space;\mathbb{P}(FP)&space;=&space;(1-e^{\frac{kn}{m}})^{k}" title="\LARGE \mathbb{P}(FP) = (1-e^{\frac{kn}{m}})^{k}" /></a>
 
-- k is the number of hash functions used
-- m is the total number of bits in the filter
-- n is the size of our word list, e.g. number of items inserted in the filter (sometimes you'll have to guess 'n')
+- k hash functions used
+- m total bits in the filter
+- n items inserted in the filter (sometimes you'll have to guess 'n')
 
 Using more hash functions allows you to use less memory without allowing more false postives, but it also requires more computations and can slow down the application. 
 {: .notice--warning}
