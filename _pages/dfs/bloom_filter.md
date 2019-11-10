@@ -20,7 +20,7 @@ Bloom filters function a lot like a hash table, but they use memory much more ef
 
 To check if an item is in the desired set, simply hash it and check the corresponding bit in the bitmap. If the bit is toggled to 0, there's no way this item is in the desired set. If the bit is set to 1, this item _might_ be in the desired set or it _might_ be a collision, e.g. two items that hash to the same value. [Bloom Filters by Example](https://llimllib.github.io/bloomfilter-tutorial/) allows you to create and play with your own filter.
 
-If you're familiar with [handling collisions]https://en.wikipedia.org/wiki/Hash_table#Collision_resolution) in a hash table, you're aware that multiple items (e.g. words) can hash to the same value. We try to avoid this by using a larger hash table, but some collisions will happen no matter what. In a bloom filter, we use the number of hash functions and the size of the filter to control the desired false positive rate. 
+If you're familiar with [handling collisions](https://en.wikipedia.org/wiki/Hash_table#Collision_resolution) in a hash table, you're aware that multiple items (e.g. words) can hash to the same value. We try to avoid this by using a larger hash table, but some collisions will happen no matter what. In a bloom filter, we use the number of hash functions and the size of the filter to control the desired false positive rate. 
 
 ## Project Setup
 
