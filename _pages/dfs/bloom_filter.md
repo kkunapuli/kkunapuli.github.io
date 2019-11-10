@@ -14,7 +14,8 @@ November 10th, 2019
 A [bloom filter](https://en.wikipedia.org/wiki/Bloom_filter) is a probabilistic data structure. It's used to quickly exclude obviously irrelevant information in exchange for tolerating some false positives. A bloom filter can say "no, this item definitely doesn't belong", or "this item might belong, but it might not". The best part is that the false alarm positive can be calculated _and controlled_.
 
 <img src="/assets/images/dfs/bloom_filter.png">
-<figcaption> Bloom filter with multiple hash functions.</figcaption>
+<figcaption> Bloom filter with multiple hash functions. </figcaption>
+
 
 Bloom filters function a lot like a hash table, but they use memory much more efficiently. A bloom filter uses less memory because it doesn't deal with collisions, so it has no need to store the actual item. In fact, all we need is **one bit** to store  `true` or `false`. This means that a bloom filter can be computed once, stored in a compact bitmap, and loaded on startup or as needed. 
 
