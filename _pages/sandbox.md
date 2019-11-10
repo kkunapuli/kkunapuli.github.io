@@ -21,8 +21,8 @@ Things I've had fun learning and exploring.
 [Split it. Map it. Send it. Count it!]({% link _pages/dfs/map_reduce.md %})
 :  With a team, I explored concurrency and synchonization by creating a MapReduce application. It's a simple use case - count the number of occurrences of unique words - but requires muilti-threading, locks, and a barrier to get it right.
 
-MapReduce: bloom filter
-: in progress
+['Bloom'ing Efficient Filter]({% link _pages/dfs/bloom_filter.md %})
+: What if we want to count a small subset of words instead of _all_ words? What if our small subset is still a **lot** of words? Bloom filters are commonly used for quick filtering with a reduced memory footprint.
 
 ## Resources
 [Tools for Adding Content]({% link _pages/resources/website.md %})
