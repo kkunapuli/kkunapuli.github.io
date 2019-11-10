@@ -30,23 +30,23 @@ If you're familiar with [handling collisions](https://en.wikipedia.org/wiki/Hash
 
 The first step of a designing a good experiment is to identify a test case and declare an expected outcome. Let's find a large text file, and count a specific set of words. I would expect this to be faster than counting _all_ words.
 
-I'm intentionally not verifying set inclusion with this application. I **want** the false positives to be reported at the end; I'm going to measure the actual false positive rate and compare it to the rate predicted by the filter design. In practice the application would double check before reporting. 
+I'm intentionally not verifying set inclusion with this application. I **want** the false positives to be reported at the end; we're going to measure the actual false positive rate and compare it to the rate predicted by the filter design. In practice the application would double check inclusion before reporting. 
 {: .notice--warning}
 
-Let's start by downloading a text version of _Alice in Wonderland_ from [Project Gutenberg](https://www.gutenberg.org/) for testing. For fun, we'll count occurrences for seven words commonly associated with _Alice in Wonderland_: `alice, cake, cat, hatter, rabbit, queen, tea`. Let's add `computer` for fun, bringing the total number of words to eight. 
+Let's start by downloading a text version of _Alice in Wonderland_ from [Project Gutenberg](https://www.gutenberg.org/) for testing. For fun, we'll count occurrences of seven words commonly associated with _Alice in Wonderland_: `alice, cake, cat, hatter, rabbit, queen, tea`. Let's add `computer`, bringing the total number of words to eight. 
 
 We'll see some surprising words in the results (such as computer) because of the Project Gutenberg license in the text file.
 {: .notice--warning}
 
 ### Generate Bloom Filters
 
-Now we can set the **filter size based on a desired false positive rate**. This is an experiment, so we'll make two filters: one with ~10% probability and one with ~1% probability of false positives. To keep things simple, we can use one hash function (a Java built-in). Probability of false positives, `P(FP)`, is _approximately_:
+Now we can set the **filter size based on a desired false positive rate**. This is an experiment, so we'll make two filters: one with ~10% probability and one with ~1% probability of false positives. To keep things simple, we can use one hash function (a Java built-in). Probability of false positives, `P(FP)`, is [_approximately_](https://en.wikipedia.org/wiki/Bloom_filter#Probability_of_false_positives):
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=\LARGE&space;\mathbb{P}(FP)&space;=&space;(1-e^{\frac{kn}{m}})^{k}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\LARGE&space;\mathbb{P}(FP)&space;=&space;(1-e^{\frac{kn}{m}})^{k}" title="\LARGE \mathbb{P}(FP) = (1-e^{\frac{kn}{m}})^{k}" /></a>
 
 - **k** hash functions used
 - **m** total bits in the filter
-- **n** items inserted in the filter (sometimes you'll have to guess **n**)
+- **n** items inserted (sometimes you'll have to guess **n**)
 
 Using more hash functions allows you to use less memory without increasing false postives, but it also requires more computations and can slow down the application. 
 {: .notice--warning}
@@ -54,7 +54,7 @@ Using more hash functions allows you to use less memory without increasing false
 <img src="/assets/images/prob_FA.png">
 <figcaption>Probability of False Positive vs. Bloom Filter Size (n=8). False positives are less frequent with larger filter sizes.</figcaption>
 
-From the plot, if we want a 10% P(FP), we need a filter with 79 bits. We increase the filter size to 673 bits for a 1% `P(FP)`. We have a few options for storing the filters on disk. We can save the raw bitmap in a binary file which would be very compact but not easily interpreted or verified. Instead, let's save only the bits (indices) with a `1` or `true`. It's still compact, but it's much easier to inspect and understand.
+From the plot, if we want a 10% `P(FP)`, we need a filter with 79 bits. We increase the filter size to 673 bits for a 1% `P(FP)`. We have a few options for storing the filters on disk. We can save the raw bitmap in a binary file which would be very compact but not easily interpreted or verified. Instead, let's save only the bits (indices) with a `1` or `true`. It's still compact, but it's much easier to inspect and understand.
 
 ```
 Indices for 79 filter size:
@@ -64,14 +64,14 @@ Indices for 673 filter size:
 [101, 294, 619, 579, 4, 409, 611, 42]
 ```
 
-We can already see the **effects of the probabilistic nature of our bloom filter**. The smaller filter (10% probability of false positives) has _two words map to the same filter index_. Since we populated our filter with eight words, we could expect 0.1 * 8 = 0.8 words to overlap (a probability of false alarm is actually the probability that unique words map to the same index). The larger filter has 8 total bits set, as expected.
+We can already see the **effects of the probabilistic nature of our bloom filter**. The smaller filter (10% probability of false positives) has _two words map to the same filter index_. Since we populated our filter with eight words, we could expect 0.1 probability * 8 = 0.8 words to overlap (a probability of false alarm is actually the probability that unique words map to the same index). The larger filter has 8 total bits set, as expected.
 
 Notice, the number of bits in a filter isn't divisible by eight. Hash tables typically use a prime number for table size. We'll waste a few bytes, but it will be a small fraction of the total filter size in practice.
 {: .notice--warning}
 
 ### Add Bloom Filter to Mapper
 
-Start by creating a Filter class. We can leverage Java's [BitSet](https://docs.oracle.com/javase/7/docs/api/java/util/BitSet.html) for the bitmap. Given a desired filter size, it creates a bitmap with the necessary number of bits. Then, it reads filter indices from disk and sets them to `1`.  
+Start by creating a Filter class. We can leverage Java's [BitSet](https://docs.oracle.com/javase/7/docs/api/java/util/BitSet.html) for the bitmap. Given a desired filter size, create a bitmap with the necessary number of bits. Then, read filter indices from disk and set them to `1`.  
 
 ```java
 import java.util.BitSet;
@@ -135,7 +135,7 @@ public Mapper(String line, Filter filter) // filter may be null
 
 ### Generate a Baseline
 
-Let's do a full word count on _Alice in Wonderland_ without any code changes or filtering. This will establish a baseline for comparing runtimes and allow us to compute an accurate false positive rate (number of false positives divided by the total number of words). Using our existing [word counter](https://kkunapuli.github.io/_pages/dfs/map_reduce/):
+Let's do a full word count on _Alice in Wonderland_ without any code changes or filtering. This will establish a baseline for comparing runtimes and allow us to compute an accurate false positive rate (number of false positives divided by the total number of unique words). Using our existing [word counter](https://kkunapuli.github.io/_pages/dfs/map_reduce/):
 
 ```sh
 $ time script/driver.sh alice_in_wonderland.txt 778 # count everything
@@ -143,7 +143,7 @@ real	0m0.719s
 user	0m3.713s # amount of time spent by CPUs
 sys	0m0.772s
 ```
-It took our word counter about 3.7 seconds to tally ~3,000 unique words. Some of the results indicate we could improve our filtering, but it's ok for now. Let's look at some of the results (remember, the Gutenberg License is in our text file).
+It took our word counter about 3.7 seconds to tally ~3,000 unique words. Some of the results indicate we could improve our filtering, but it's ok for now. Let's look at some of the word counts (remember, the Gutenberg License is in our text file).
 
 ```sh
 $ sort -k 1 reduce_results.all.txt | tail -10
@@ -166,14 +166,14 @@ Using the smaller filter size, run the word counter again. Is it faster? How man
 ```sh
 $ time script/driver.sh alice_in_wonderland.txt 778 bloom_filter.79.txt 
 real	0m0.634s
-user	0m3.414s
+user	0m3.414s # CPU time
 sys	0m0.786s
 
 $ cat reduce_results.79.txt | wc -l
      286 # this is about 10% of 3k unique words
 ```
 
-A bit unexpectedly, the word counter with a filter only takes 0.3 seconds less CPU time. This is why it's a good idea to identify an application's bottlenecks _before optimizing it_. I suspect most of the processing time is spent in the Splitter, Stemmer, and Mapper and is unaffected the filtering. Since the goal is to have some fun experimenting with bloom filters, I'm curious but not worried about timing results. 
+Unexpectedly, the word counter with a filter only takes 0.3 seconds less CPU time. This is why it's a good idea to identify an application's bottlenecks _before optimizing it_. I suspect most of the processing time is spent in the Splitter, Stemmer, and Mapper and is unaffected by filtering. Since the goal is to have some fun experimenting with bloom filters, I'm curious but not worried about timing results. 
 
 ## Test with ~ 1% Probability of False Positives
 
@@ -182,7 +182,7 @@ Rerun the word counter with the larger filter (673 bits with 1% false positives)
 ```sh
 $ time script/driver.sh alice_in_wonderland.txt 778 bloom_filter.673.txt 
 real	0m0.588s
-user	0m3.324s
+user	0m3.324s # CPU time
 sys	0m0.747s
 
 $ cat reduce_results.673.txt | wc -l
@@ -228,12 +228,12 @@ All counted words (filter words in **bold**):
 * top 8
 * water 5
 
-Not all words are counted. You might be wondering if that means our count is off for some words. Since a hash function is deterministic (gives the same output with consistent input), a word will either _always_ or _never_ pass through the filter - until we load a new filter. 
+Not all words are counted. You might be wondering if that means our count is wrong for some words. Since a hash function is deterministic (gives the same output with consistent input), a word will either _always_ or _never_ pass through the filter - until we load a new filter. 
 {: .notice--warning}
 
-In a production application, we would check for inclusion in our list of words before printing results (probably at the Reducer level). I skipped that step here so we could see what it really means to have a false positive rate. In the end, the filter reduced timing by 0.5 seconds or 13%. It's not a huge improvement, but then again it didn't take much effort to implement...
+In a production application, we would check for inclusion in our list of words before printing results (probably at the Reducer level). I skipped that step here so we could see what it really means to have a false positive rate. In the end, the filter reduced timing by 0.5 seconds or 13%. It's not a huge improvement, but then again it didn't take much effort to implement.
 
-Because our set of words is so small, we'd be better off using a traditional set and having zero probability of false positives. The difference in memory usage would be negligible and our output would only included the words of interest. Coding it up would also be simpler with a built-in set.
+Because our list of words is so small, we'd be better off using a traditional set and having zero probability of false positives. The difference in memory usage would be negligible and our output would only include the words of interest. Coding it up would also be simpler with a built-in set.
 
 
 
