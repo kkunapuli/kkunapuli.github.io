@@ -18,10 +18,10 @@ A [bloom filter](https://en.wikipedia.org/wiki/Bloom_filter) is a probabilistic 
 
 Bloom filters function a lot like a hash table, but they use memory much more efficiently. A bloom filter uses less memory because it doesn't deal with collisions, so it has no need to store the actual item. In fact, all we need is **one bit** to store  `true` or `false`. This means that a bloom filter can be computed once, stored in a compact bitmap, and loaded on startup or as needed. 
 
-A hash table requires 4 or 8 **bytes** per index compared to a bloom filter's one **bit**.
+A hash table requires 4 or 8 **bytes** per index while a bloom filter only requires one **bit**.
 {: .notice--warning}
 
-To check if an item is in the desired set, simply hash it and check the corresponding bit in the bitmap. If the bit is toggled to 0, there's no way this item is in the desired set. If the bit is set to 1, this item _might_ be in the desired set or it _might_ be a collision, e.g. two items that hash to the same value. [Bloom Filters by Example](https://llimllib.github.io/bloomfilter-tutorial/) allows you to create and play with your own filter.
+To check if an item is in the desired set, simply hash it and check the corresponding bit in the bitmap. If the bit is toggled to `0`, there's no way this item is in the desired set. If the bit is set to `1`, this item _might_ be in the desired set or it _might_ be a collision, e.g. two items that hash to the same value. [Bloom Filters by Example](https://llimllib.github.io/bloomfilter-tutorial/) allows you to create and play with your own filter.
 
 If you're familiar with [handling collisions](https://en.wikipedia.org/wiki/Hash_table#Collision_resolution) in a hash table, you're aware that multiple items (e.g. words) can hash to the same value. We try to avoid this by using a larger hash table, but some collisions will happen no matter what. In a bloom filter, we use the number of hash functions and the size of the filter to control the desired false positive rate. 
 
@@ -32,32 +32,38 @@ The first step of a designing a good experiment is to identify a test case and d
 I intentionally am not verifying set inclusion with this application. I **want** the false positives to be reported at the end; I'm going to measure the actual false positive rate and compare it to the rate predicted by the filter design. In practice the application would double check any bits set to 1 before reporting. 
 {: .notice--warning}
 
-I downloaded a text version of _Alice in Wonderland_ from [Project Gutenberg](https://www.gutenberg.org/) for testing. Then, I decided on a list of eight words to count: `alice, cake, cat, hatter, rabbit, queen, tea`. I threw in `computer` for fun. 
+I downloaded a text version of _Alice in Wonderland_ from [Project Gutenberg](https://www.gutenberg.org/) for testing. Then, I decided on a list of seven words to count: `alice, cake, cat, hatter, rabbit, queen, tea`. I threw in `computer` for fun, which brings the total to eight. 
 
-Next, I set the **filter size based on a desired false positive rate**. This is an experiment, so I decided to make two filters: one with ~10% probability and one with ~1% probability for false alarms. To keep things simple, I stuck with one hash function (a Java built-in). Probability of false positives, `P(FP)` is given by:
+### Generate Bloom Filters
+
+Next, I set the **filter size based on a desired false positive rate**. This is an experiment, so I decided to make two filters: one with ~10% probability and one with ~1% probability of false positives. To keep things simple, I stuck with one hash function (a Java built-in). Probability of false positives, `P(FP)`, is given by:
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=\LARGE&space;\mathbb{P}(FP)&space;=&space;(1-e^{\frac{kn}{m}})^{k}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\LARGE&space;\mathbb{P}(FP)&space;=&space;(1-e^{\frac{kn}{m}})^{k}" title="\LARGE \mathbb{P}(FP) = (1-e^{\frac{kn}{m}})^{k}" /></a>
 
 - k is the number of hash functions used
 - m is the total number of bits in the filter
-- n is the size of our word list, e.g. number of items inserted in the filter
+- n is the size of our word list, e.g. number of items inserted in the filter (sometimes you'll have to guess 'n')
 
 Using more hash functions allows you to use less memory without allowing more false postives, but it also requires more computations and can slow down the application. 
 {: .notice--warning}
 
 <img src="/assets/images/prob_FA.png">
-<figcaption>Probability of False Positive vs. Bloom Filter Size. False positives are less frequent with larger filter sizes.</figcaption>
+<figcaption>Probability of False Positive vs. Bloom Filter Size (n=8). False positives are less frequent with larger filter sizes.</figcaption>
 
-- create some filters and write out just the "hits" (sparse compression)
+From the plot, if we want a 10% P(FP), we need a filter with 79 bits. We increase the filter size to 673 bits for a 1% P(FP). I had two options for storing the filters on disk. I could have saved the raw bitmap in a binary file which would be very compact but not easily interpreted or verified. Instead, I saved only the index locations with a '1' or 'true', e.g. "hits". It's still compact, but it's much easier to inspect and understand.
+
 `Indices for 79 filter size:
 [67, 75, 20, 18, 65, 53, 55, 67]
+
 Indices for 673 filter size:
 [101, 294, 619, 579, 4, 409, 611, 42]`
 
-- memory usage for these?
+Notice, the number of bits in a filter isn't divisible by eight. Hash tables typically use a prime number for table size. We'll waste a few bytes, but it will be a small fraction of the total filter size in practice.
+{: .notice--warning}
 
+### Add Bloom Filter to Mapper
 
-- using Java's [BitSet](https://docs.oracle.com/javase/7/docs/api/java/util/BitSet.html)
+Using an existing MapReduce [word count application](https://kkunapuli.github.io/_pages/dfs/map_reduce/) as a starting point, I added an optional bloom filter to the Mapper step. Java has a [BitSet](https://docs.oracle.com/javase/7/docs/api/java/util/BitSet.html) class that makes it easy to create and use a bitmap.
 
 ```java
 import java.util.BitSet;
