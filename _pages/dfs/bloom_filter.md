@@ -54,11 +54,13 @@ Using more hash functions allows you to use less memory without allowing more fa
 
 From the plot, if we want a 10% P(FP), we need a filter with 79 bits. We increase the filter size to 673 bits for a 1% P(FP). I had a few options for storing the filters on disk. I could have saved the raw bitmap in a binary file which would be very compact but not easily interpreted or verified. Instead, I saved only the index locations with a '1' or 'true', e.g. "hits". It's still compact, but it's much easier to inspect and understand.
 
-`Indices for 79 filter size:
+```
+Indices for 79 filter size:
 [67, 75, 20, 18, 65, 53, 55, 67]
 
 Indices for 673 filter size:
-[101, 294, 619, 579, 4, 409, 611, 42]`
+[101, 294, 619, 579, 4, 409, 611, 42]
+```
 
 We can already see the **effects of the probabilistic nature of our bloom filter**. The smaller filter (10% probability of false positives) has _two words map to the same filter index_. Since we populated our filter with eight words, we could expect 0.1 * 8 = 0.8 words to overlap (a probability of false alarm is actually the probability that unique words map to the same index). 
 
