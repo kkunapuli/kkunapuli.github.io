@@ -60,6 +60,8 @@ From the plot, if we want a 10% P(FP), we need a filter with 79 bits. We increas
 Indices for 673 filter size:
 [101, 294, 619, 579, 4, 409, 611, 42]`
 
+We can already see the **effects of the probabilistic nature of our bloom filter**. The smaller filter (10% probability of false positives) has _two words map to the same filter index_. Since we populated our filter with eight words, we could expect 0.1 * 8 = 0.8 words to overlap (a probability of false alarm is actually the probability that unique words map to the same index). 
+
 Notice, the number of bits in a filter isn't divisible by eight. Hash tables typically use a prime number for table size. We'll waste a few bytes, but it will be a small fraction of the total filter size in practice.
 {: .notice--warning}
 
@@ -125,15 +127,21 @@ public Mapper(String line, Filter filter) // filter may be null
 }
 ```
 
-## Getting a Baseline
-run alice in wonderland without any changes
+## Measure Performance
+
+### Generate a Baseline
+
+First, let's do a full word count on _Alice in Wonderland_ without any code changes or filtering. This will establish a baseline for comparing runtimes and allow us to compute an accurate false positive rate (number of false positives divided by the total number of words). Using our existing [word counter](https://kkunapuli.github.io/_pages/dfs/map_reduce/):
+
+```sh
 $ time script/driver.sh alice_in_wonderland.txt 778 # count everything
 real	0m0.719s
-user	0m3.713s
+user	0m3.713s # amount of time spent by CPUs
 sys	0m0.772s
+```
+It took our word counter about 3.7 seconds to tally ~3,000 unique qords. Some of the results indicate we could improve our filtering, but it's ok for now. Let's look at some of the results (remember, the Gutenberg License is in our text file).
 
-Some results: (~3k unique words)
-Some numbers in there that indicate we could improve our filtering
+```sh
 $ sort -k 1 reduce_results.all.txt | tail -10
 yet 25
 you 481
@@ -145,8 +153,12 @@ youth 6
 zealand 1
 zigzag 1
 zip 1
+```
 
-## Try with ~10% Probability of False Positive
+### Test with ~10% Probability of False Positives
+
+Using the smaller filter size, run the word counter again. Is it faster? How many extra words are reported?
+
 ```sh
 $ time script/driver.sh alice_in_wonderland.txt 778 bloom_filter.79.txt 
 real	0m0.634s
@@ -157,7 +169,10 @@ $ cat reduce_results.79.txt | wc -l
      286 # this is about 10% of 3k unique words
 ```
 
-## Try with ~ 1% Probability of False Positive
+A bit unexpectedly, the word counter with a filter only takes 0.3 seconds less CPU time. This is why it's a good idea to identify an application's bottlenecks _before optimizing it_. I suspect most of the processing time is spent in the Splitter, Stemmer, and Mapper and is unaffected by the filtering. Since the goal was to have some fun experimenting with bloom filters, I'm curious but not worried about timing results. 
+
+## Test with ~ 1% Probability of False Positives
+
 ```sh
 $ time script/driver.sh alice_in_wonderland.txt 778 bloom_filter.673.txt 
 real	0m0.588s
@@ -167,8 +182,9 @@ sys	0m0.747s
 $ cat reduce_results.673.txt | wc -l
       36 # about 1% of 3k unique words
 ```
+Using a larger filter, with smaller false positive probability, reduced timing a little more. More importantly, it greatly reduced the number of reported results.
 
-All the words:
+All the words (filter words in **bold**):
 * **alice 403**
 * because 16
 * binary 1
@@ -187,24 +203,24 @@ All the words:
 * **hatter 56**
 * held 4
 * hiss 1
-jaw 1
-kind 8
-kiss 1
-learned 1
-leave 9
-never 48
-order 3
-out 118
-**queen 75**
-**rabbit 51**
-say 51
-sends 1
-solid 1
-speed 1
-strange 5
-**tea 19**
-top 8
-water 5
+* jaw 1
+* kind 8
+* kiss 1
+* learned 1
+* leave 9
+* never 48
+* order 3
+* out 118
+* **queen 75**
+* **rabbit 51**
+* say 51
+* sends 1
+* solid 1
+* speed 1
+* strange 5
+* **tea 19**
+* top 8
+* water 5
 
 ## So, what does this all mean?
 We would actually check for inclusion in our list of words before printing results (probably at the reducer) but I let it all go through so we could see what it really means to have a false positive rate
