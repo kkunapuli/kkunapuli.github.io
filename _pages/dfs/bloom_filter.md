@@ -50,7 +50,7 @@ Using more hash functions allows you to use less memory without allowing more fa
 <img src="/assets/images/prob_FA.png">
 <figcaption>Probability of False Positive vs. Bloom Filter Size (n=8). False positives are less frequent with larger filter sizes.</figcaption>
 
-From the plot, if we want a 10% P(FP), we need a filter with 79 bits. We increase the filter size to 673 bits for a 1% P(FP). I had two options for storing the filters on disk. I could have saved the raw bitmap in a binary file which would be very compact but not easily interpreted or verified. Instead, I saved only the index locations with a '1' or 'true', e.g. "hits". It's still compact, but it's much easier to inspect and understand.
+From the plot, if we want a 10% P(FP), we need a filter with 79 bits. We increase the filter size to 673 bits for a 1% P(FP). I had a few options for storing the filters on disk. I could have saved the raw bitmap in a binary file which would be very compact but not easily interpreted or verified. Instead, I saved only the index locations with a '1' or 'true', e.g. "hits". It's still compact, but it's much easier to inspect and understand.
 
 `Indices for 79 filter size:
 [67, 75, 20, 18, 65, 53, 55, 67]
@@ -63,7 +63,7 @@ Notice, the number of bits in a filter isn't divisible by eight. Hash tables typ
 
 ### Add Bloom Filter to Mapper
 
-Using an existing MapReduce [word count application](https://kkunapuli.github.io/_pages/dfs/map_reduce/) as a starting point, I added an optional bloom filter to the Mapper step. Java has a [BitSet](https://docs.oracle.com/javase/7/docs/api/java/util/BitSet.html) class that makes it easy to create and use a bitmap.
+First, I created a Filter class leveraging Java's [BitSet](https://docs.oracle.com/javase/7/docs/api/java/util/BitSet.html) for the bitmap. Given a desired filter size, it creates a bitmap with the necessary number of bits. Then, it reads filter indices from disk and sets them to `1`.  
 
 ```java
 import java.util.BitSet;
@@ -89,11 +89,11 @@ private static class Filter{
     br.close();
   }
 		
-    boolean isSet(int bit) {
-      return filter.get(bit);
-    }
+  boolean isSet(int bit) {
+    return filter.get(bit);
+  }
 		
-    int getIndex(String word) {
+  int getIndex(String word) {
     int index = word.hashCode()%filterSize;
     if(index < 0) {
       index += filterSize;
@@ -104,7 +104,8 @@ private static class Filter{
 }
 ```
 
-now our mapper looks like this:
+Using an existing MapReduce [word count application](https://kkunapuli.github.io/_pages/dfs/map_reduce/) as a starting point, I added an optional bloom filter to the Mapper step. Our updated mapper looks like this:
+
 ```java
 // print word + "1" for counting
 public Mapper(String line, Filter filter) // filter may be null
